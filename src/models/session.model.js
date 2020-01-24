@@ -8,6 +8,11 @@ const SessionSchema = new Schema(
 			trim: true,
 			unique: true
 		},
+		semester: {
+			type: String,
+			required: true,
+			trim: true
+		},
 		active: {
 			type: Boolean,
 			default: false
