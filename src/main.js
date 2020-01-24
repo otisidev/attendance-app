@@ -17,7 +17,7 @@ connect()
 				.then(
 					({ url, subscriptionsUrl }) =>
 						console.log(`Runing @ >_ ${url}`) ||
-						console.log("PubSub Server @ >_ " + subscriptionsUrl)
+						console.log("Pub-Sub Server @ >_ " + subscriptionsUrl)
 				)
 				.catch(e => console.log("SERVER ERROR: ", e.message))
 	)
