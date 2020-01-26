@@ -1,4 +1,5 @@
 const { model, Schema } = require("mongoose");
+const paginate = require("mongoose-paginate-v2");
 
 const AuditSchema = new Schema(
 	{
@@ -33,7 +34,14 @@ const AuditSchema = new Schema(
 AuditSchema.virtual("id").get(function() {
 	return this._id;
 });
+AuditSchema.virtual("desc").get(function() {
+	return this.description;
+});
+AuditSchema.virtual("user_agent").get(function() {
+	return this.userAgent;
+});
 
 AuditSchema.set("toJSON", { virtual: true });
 // public member
+AuditSchema.plugin(paginate);
 exports.AuditModel = model("Audit", AuditSchema);
