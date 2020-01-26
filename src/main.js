@@ -7,7 +7,9 @@ const server = new ApolloServer({
 	modules: [
 		require("./modules/department"),
 		require("./modules/session"),
-		require("./modules/maximum-credit")
+		require("./modules/maximum-credit"),
+		require("./modules/user"),
+		require("./modules/log")
 	],
 	introspection: true,
 	dataSources: () => ({
