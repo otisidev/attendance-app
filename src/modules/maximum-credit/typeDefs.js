@@ -13,7 +13,7 @@ const typeDefs = gql`
 			model: MaximumCreditInput!
 		): MaximumCreditResponse!
 		"Removes a single MaximumCredit object"
-		DeleteMaximumCredit("MaximumCredit id" id: ID!): DeletedReponse!
+		DeleteMaximumCredit("MaximumCredit id" id: ID!): DeletedResponse!
 	}
 
 	"New Maximum credit unit template"
