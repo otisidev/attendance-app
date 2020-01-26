@@ -5,8 +5,7 @@ const SessionSchema = new Schema(
 		title: {
 			type: String,
 			required: true,
-			trim: true,
-			unique: true
+			trim: true
 		},
 		semester: {
 			type: String,
@@ -30,4 +29,5 @@ SessionSchema.virtual("id").get(function() {
 
 SessionSchema.set("toJSON", { virtual: true });
 // public member
+SessionSchema.index({ title: 1, semester: 1 }, { unique: true });
 exports.SessionModel = model("Session", SessionSchema);
