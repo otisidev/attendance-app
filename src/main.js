@@ -4,7 +4,11 @@ const { services, helpers } = require("./services/root.service");
 
 //  ApolloServer instance
 const server = new ApolloServer({
-	modules: [require("./modules/department"), require("./modules/session")],
+	modules: [
+		require("./modules/department"),
+		require("./modules/session"),
+		require("./modules/maximum-credit")
+	],
 	introspection: true,
 	dataSources: () => ({
 		...services,
