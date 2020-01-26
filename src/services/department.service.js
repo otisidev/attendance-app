@@ -1,5 +1,5 @@
 const { DepartmentModel } = require("../models/department.model");
-const { Schema, Types } = require("mongoose");
+const { Types } = require("mongoose");
 
 // local props
 const Model = DepartmentModel;
