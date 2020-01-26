@@ -2,11 +2,26 @@
 
 const resolvers = {
 	Query: {
-		getDepartments: () => [
-			"Computer Science",
-			"Accountancy",
-			"Business Management"
-		]
+		getDepartments: async (_, __, { dataSources }) => {
+			return await dataSources._dService.GetDepartments();
+		},
+		getDepartment: async (_, { id }, { dataSources }) => {
+			return await dataSources._dService.GetDepartment(id);
+		}
+	},
+	Mutation: {
+		createDepartment: async (_, { name }, { dataSources }) => {
+			return await dataSources._dService.NewDepartment(name);
+		},
+		updateDepartment: async (_, { id, name }, { dataSources }) => {
+			return await dataSources._dService.UpdateDepartment(id, name);
+		},
+		DeleteDepartment: async (_, { id }, { dataSources }) => {
+			return await dataSources._dService.RemoveDepartment(id);
+		}
+	},
+	Department: {
+		created_at: ({ created_at }) => new Date(created_at).toISOString()
 	}
 };
 
