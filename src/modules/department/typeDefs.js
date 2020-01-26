@@ -19,7 +19,7 @@ const typeDefs = gql`
 			name: String!
 		): DepartmentResponse!
 		"Removes a single department object"
-		DeleteDepartment("department id" id: ID!): DeletedReponse!
+		DeleteDepartment("department id" id: ID!): DeletedResponse!
 	}
 	"Department list response template"
 	type DepartmentListResponse {
@@ -51,7 +51,7 @@ const typeDefs = gql`
 	}
 
 	"Object removal response template"
-	type DeletedReponse {
+	type DeletedResponse {
 		"Request status code"
 		status: Int!
 		"Request status message"
