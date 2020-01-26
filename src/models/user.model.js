@@ -1,4 +1,5 @@
 const { model, Schema } = require("mongoose");
+const paginate = require("mongoose-paginate-v2");
 
 const UserSchema = new Schema(
 	{
@@ -15,7 +16,7 @@ const UserSchema = new Schema(
 		},
 		author: {
 			type: Schema.Types.ObjectId,
-			required: true,
+			required: false,
 			trim: true,
 			ref: "User"
 		},
@@ -37,4 +38,5 @@ UserSchema.virtual("id").get(function() {
 
 UserSchema.set("toJSON", { virtual: true });
 // public member
+UserSchema.plugin(paginate);
 exports.UserModel = model("User", UserSchema);
