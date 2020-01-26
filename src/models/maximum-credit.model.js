@@ -28,5 +28,9 @@ MaximumCreditSchema.virtual("id").get(function() {
 });
 
 MaximumCreditSchema.set("toJSON", { virtual: true });
+MaximumCreditSchema.index(
+	{ department: 1, level: 1, creditUnit: 1 },
+	{ unique: true }
+);
 // public member
 exports.MaximumCreditModel = model("MaximumCredit", MaximumCreditSchema);
