@@ -1,10 +1,15 @@
 const { connect } = require("../context/icontext.service");
 const { ApolloServer } = require("apollo-server");
+const { services, helpers } = require("./services/root.service");
 
 //  ApolloServer instance
 const server = new ApolloServer({
 	modules: [require("./modules/department")],
-	introspection: true
+	introspection: true,
+	dataSources: () => ({
+		...services,
+		helpers
+	})
 });
 
 // init database connection
