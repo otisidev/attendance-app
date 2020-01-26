@@ -1,6 +1,7 @@
 const { connect } = require("../context/icontext.service");
 const { ApolloServer } = require("apollo-server");
 const { services, helpers } = require("./services/root.service");
+const { verify } = require("jsonwebtoken");
 
 //  ApolloServer instance
 const server = new ApolloServer({
@@ -15,7 +16,23 @@ const server = new ApolloServer({
 	dataSources: () => ({
 		...services,
 		helpers
-	})
+	}),
+	context: async ({ req }) => {
+		let _obj = { ip: req.ip, userAgent: req.headers["user-agent"] };
+		const auth = req.headers.authorization;
+		if (auth) {
+			const token = auth.split(" ")[1];
+			if (token) {
+				try {
+					const user = verify(token, process.env.DB_KEY);
+					if (user) _obj.user = user;
+				} catch (error) {
+					console.log("Token Verifiction: ", error.message);
+				}
+			}
+		}
+		return _obj;
+	}
 });
 
 // init database connection
