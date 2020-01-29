@@ -18,7 +18,7 @@ const typeDefs = gql`
 		NewUserAccount(
 			"object containing new user props"
 			model: UserInput!
-		): UserResponse!
+		): LoginResponse!
 		"Updates user's password"
 		UpdateUserPassword(
 			"object containing new and old password"
