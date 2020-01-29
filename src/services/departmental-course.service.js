@@ -28,7 +28,6 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 					message: "Record saved successfully!",
 					doc: cb
 				};
-
 			throw new Error("Invalid departmental course object!");
 		}
 	}
@@ -176,6 +175,73 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 				status: 200,
 				message: "Found!",
 				doc: cb
+			};
+		}
+		throw new Error("Departmental course not found!");
+	}
+
+	/**
+	 * Gets a list of departmental course list for student
+	 * @param {string} department department id
+	 */
+	async GetStudentAssignableCourses(department) {
+		// validation
+		if (isValid(department)) {
+			// query statement
+			const q = [
+				{
+					$match: {
+						removed: false,
+						department: Types.ObjectId(department)
+					}
+				},
+				{
+					$group: {
+						_id: {
+							level: "$level",
+							semester: "$semester"
+						},
+						courses: {
+							$push: {
+								id: "$_id",
+								title: "$title",
+								code: "$code",
+								credit_unit: "$creditUnit"
+							}
+						},
+						count: { $sum: 1 }
+					}
+				},
+				{
+					$group: {
+						_id: "$_id.level",
+						data: {
+							$push: {
+								semester: "$_id.semester",
+								courses: "$courses",
+								total: "$count"
+							}
+						}
+					}
+				},
+				{
+					$project: {
+						_id: 0,
+						level: "$_id",
+						data: 1
+					}
+				},
+				{
+					$sort: { level: 1 }
+				}
+			];
+			// query execution
+			const result = await Model.aggregate(q).exec();
+			// result
+			return {
+				status: 200,
+				message: "Completed!",
+				docs: result
 			};
 		}
 		throw new Error("Departmental course not found!");
