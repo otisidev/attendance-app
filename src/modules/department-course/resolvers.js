@@ -17,6 +17,21 @@ const resolvers = {
 				return await dataSources._dcService.GetDepartmentalCourse(id);
 			}
 			return new AuthenticationError("Unauthorized Access!");
+		},
+		GetStudentRegisterableCourses: async (_, __, { dataSources, user }) => {
+			if (user) {
+				// user is meant to be student
+				const { _dcService, _studService } = dataSources;
+				//  get a single student
+				const student_res = await _studService.GetStudentByid(user.id);
+				// get department
+				const { department } = student_res.doc;
+				const result = await _dcService.GetStudentAssignableCourses(
+					department.id
+				);
+				return result;
+			}
+			return new AuthenticationError("Unauthorized Access!");
 		}
 	},
 	Mutation: {
