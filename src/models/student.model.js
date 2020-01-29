@@ -26,6 +26,10 @@ const StudentSchema = new Schema(
 			trim: true,
 			unique: true
 		},
+		image: {
+			type: String,
+			trim: true
+		},
 		passphase: {
 			type: String,
 			required: true,
@@ -48,6 +52,10 @@ const StudentSchema = new Schema(
 					required: true,
 					trim: true,
 					ref: "DepartmentalCourse"
+				},
+				level: {
+					type: Number,
+					required: true
 				},
 				date: {
 					type: Date,
