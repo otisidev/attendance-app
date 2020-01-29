@@ -26,11 +26,17 @@ const DepartmentalCourseSchema = new Schema(
 			trim: true,
 			ref: "Department"
 		},
+		semester: {
+			type: String,
+			required: true,
+			trim: true
+		},
 		lecturers: [
 			{
 				type: Schema.Types.ObjectId,
 				trim: true,
-				ref: "Lecturer"
+				ref: "Lecturer",
+				default: []
 			}
 		],
 		removed: {
