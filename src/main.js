@@ -12,7 +12,8 @@ const server = new ApolloServer({
 		require("./modules/user"),
 		require("./modules/log"),
 		require("./modules/department-course"),
-		require("./modules/lecturer")
+		require("./modules/lecturer"),
+		require("./modules/student")
 	],
 	introspection: true,
 	dataSources: () => ({
@@ -29,7 +30,7 @@ const server = new ApolloServer({
 					const user = verify(token, process.env.DB_KEY);
 					if (user) _obj.user = user;
 				} catch (error) {
-					console.log("Token Verifiction: ", error.message);
+					// console.log("Token Verifiction: ", error.message);
 				}
 			}
 		}
