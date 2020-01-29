@@ -46,6 +46,9 @@ const LecturerSchema = new Schema(
 LecturerSchema.virtual("id").get(function() {
 	return this._id;
 });
+LecturerSchema.virtual("assigned_courses").get(function() {
+	return this.assignedCourses;
+});
 
 LecturerSchema.set("toJSON", { virtual: true });
 // public member
