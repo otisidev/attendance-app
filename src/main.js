@@ -10,7 +10,9 @@ const server = new ApolloServer({
 		require("./modules/session"),
 		require("./modules/maximum-credit"),
 		require("./modules/user"),
-		require("./modules/log")
+		require("./modules/log"),
+		require("./modules/department-course"),
+		require("./modules/lecturer")
 	],
 	introspection: true,
 	dataSources: () => ({
