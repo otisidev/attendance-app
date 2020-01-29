@@ -76,6 +76,44 @@ exports.StudentService = class StudentService {
 	}
 
 	/**
+	 *Updates a single student image
+	 * @param {string} id student id
+	 * @param {string} image student image path
+	 */
+	async UpdateStudentImage(id, image) {
+		if (isValid(id) && image) {
+			// query
+			const q = { removed: false, _id: id };
+			// Update statement
+			const u = { $set: { image } };
+			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			if (cb)
+				return {
+					status: 200,
+					message: "Updated student's image successfully!",
+					doc: cb
+				};
+		}
+		throw new Error("Student not found!");
+	}
+	async UpdateStudent(id, name, phone) {
+		if (isValid(id) && name && phone) {
+			// query
+			const q = { removed: false, _id: id };
+			// Update statement
+			const u = { $set: { name, phone } };
+			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			if (cb)
+				return {
+					status: 200,
+					message: "Updated student's record successfully!",
+					doc: cb
+				};
+		}
+		throw new Error("Student not found!");
+	}
+
+	/**
 	 * Gets a single student record
 	 * @param {string} id Student id
 	 */
@@ -175,27 +213,61 @@ exports.StudentService = class StudentService {
 		}
 	}
 
-	async GetStudentDepartmentalCourseList(id, session) {
+	/**
+	 * Gets list of registered student course list
+	 * @param {string} id student id
+	 * @param {string} session active session id
+	 */
+	async GetStudentRegisteredCourseList(id, session) {
 		// validation
 		if (isValid(id) && isValid(session)) {
-			const q = {
-				removed: false,
-				_id: id,
-				"registeredCourses.session": session
-			};
+			const q = [
+				{ $unwind: "$registeredCourses" },
+				{
+					$match: {
+						_id: Types.ObjectId(id),
+						"registeredCourses.session": Types.ObjectId(session)
+					}
+				},
+				{
+					$group: {
+						_id: {
+							session: "$registeredCourses.session",
+							level: "$registeredCourses.level"
+						},
+						courses: {
+							$push: {
+								_id: "$_id",
+								course: "$departmentalCourse",
+								date: "$date"
+							}
+						},
+						total: { $sum: 1 }
+					}
+				},
+				{
+					$project: {
+						_id: 0,
+						session: "$_id.session",
+						level: "$_id.level",
+						courses: 1,
+						total: 1
+					}
+				}
+			];
+
 			// query execution
-			const cb = await Model.find(q)
-				.populate("registeredCourses.departmentalCourse.lecturers")
-				.select("registeredCourses")
-				.exec();
-			// pick only departmental course props
-			const docs = cb.map(item => ({
-				...item.registeredCourses
-			}));
+			const result = await Model.aggregate(q).exec();
+			// populdate
+			await Model.populate(result, [
+				{ model: "Session", path: "session" },
+				{ model: "DepartmentalCourse", path: "courses.course" }
+			]);
+
 			return {
 				status: 200,
 				message: "Completed!",
-				docs
+				docs: result
 			};
 		}
 		throw new Error("Student not found!");
@@ -206,13 +278,15 @@ exports.StudentService = class StudentService {
 	 * @param {string} id student id
 	 * @param {Array<string>} courses list of departmental course ids
 	 * @param {string} session session id
+	 * @param {number} level student level as of when the course was registered
 	 */
-	async UpdateRegisteredCourse(id, courses, session) {
-		if (isValid(session) && isValid(id) && courses.length) {
+	async UpdateRegisteredCourse(id, courses, session, level) {
+		if (isValid(session) && isValid(id) && courses.length && level) {
 			const q = { removed: false, _id: id };
 			const deptCourses = courses.map(item => ({
 				session,
-				departmentalCourse: item
+				departmentalCourse: item,
+				level
 			}));
 			// update statement
 			const u = { $addToSet: { registeredCourses: deptCourses } };
@@ -226,5 +300,20 @@ exports.StudentService = class StudentService {
 				};
 		}
 		throw new Error("Invalid departmental course!");
+	}
+
+	async RemoveStudent(id) {
+		if (isValid(id)) {
+			const q = { removed: false, _id: id };
+			const update = { $set: { removed: true } };
+			const cb = await Model.findOneAndUpdate(q, update).exec();
+			if (cb)
+				return {
+					status: 200,
+					message: "Student account removed successfully!",
+					doc: { id, status: "Deleted" }
+				};
+		}
+		throw new Error("Failed! Student account not found.");
 	}
 };
