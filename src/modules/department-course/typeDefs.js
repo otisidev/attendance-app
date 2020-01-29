@@ -14,6 +14,9 @@ const typeDefs = gql`
 			"Departmental course id"
 			id: ID!
 		): DepartmentalCourseResponse!
+
+		"Get Student Registerable course list"
+		GetStudentRegisterableCourses: StudentDepartmentalCourseResponse!
 	}
 
 	extend type Mutation {
@@ -99,6 +102,44 @@ const typeDefs = gql`
 		department: Department
 		"List of lecturers taking the course"
 		assgned_lecturers: [Lecturer]
+	}
+
+	"Student departmental course template"
+	type StudentDepartmentalCourseResponse {
+		"Response status code"
+		status: Int!
+		"Response status message"
+		message: String!
+		"Response data"
+		docs: [StudentDepartmentalCourseModel!]
+	}
+
+	"Student Departmental course model template"
+	type StudentDepartmentalCourseModel {
+		"Student level"
+		level: Int!
+		"Student course data"
+		data: [StudentDepartmentalCourseData!]
+	}
+	"Student course template"
+	type StudentDepartmentalCourseData {
+		"Semester"
+		semester: String!
+		"Total  course found"
+		total: Int!
+		"List of school course "
+		courses: [StudentCourse!]
+	}
+	"School course template"
+	type StudentCourse {
+		"Departmental course id"
+		id: ID!
+		"course title"
+		title: String!
+		"course code"
+		code: String!
+		"course credit unit"
+		credit_unit: Int!
 	}
 `;
 
