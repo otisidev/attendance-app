@@ -24,6 +24,8 @@ const _studService = new StudentService();
 const _aService = new AttendanceService();
 const coreService = new CoreService();
 
+const { fileRead } = require("../../lib/file-reader");
+
 // public instance
 module.exports = {
 	services: {
@@ -38,5 +40,7 @@ module.exports = {
 		_studService,
 		_aService
 	},
-	helpers: {}
+	helpers: {
+		fileRead
+	}
 };
