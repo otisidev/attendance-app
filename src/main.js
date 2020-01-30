@@ -21,12 +21,21 @@ const server = new ApolloServer({
 		...services,
 		helpers
 	}),
-	context: async ({ event, context }) => {
-		// console.log(context.clientContext.user);
-		return {
-			userAgent: event.headers["user-agent"],
-			user: context.clientContext.user
+	context: async ({ event }) => {
+		const cb = {
+			userAgent: event.headers["user-agent"]
 		};
+		const auth = event.headers.authorization || "";
+		if (auth) {
+			const token = auth.split(" ")[1];
+			// check if token is null or empty
+			if (token) {
+				// try to verify the token
+				const user = verify(token, process.env.DB_KEY);
+				if (user) cb.user = user;
+			}
+		}
+		return cb;
 	}
 });
 
