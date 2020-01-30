@@ -316,4 +316,34 @@ exports.StudentService = class StudentService {
 		}
 		throw new Error("Failed! Student account not found.");
 	}
+
+	/**
+	 * Check if the contains id and name
+	 * @param {Array<any>} content List of students' ids and names
+	 */
+	async IsFileValid(content) {
+		if (content.length) {
+			return content.every(s => "id" in s && "fingerprint" in s);
+		}
+		return false;
+	}
+
+	/**
+	 * Updates many student biometric data
+	 * @param {Array<any>} students list of students object
+	 */
+	async UpdateManyFinger(students) {
+		if (students.every(s => isValid(s.id))) {
+			//
+			students.forEach(async item => {
+				await Model.findByIdAndUpdate(
+					{
+						removed: false,
+						_id: item.id
+					},
+					{ $set: { fingerPrint: item.fingerprint } }
+				).exec();
+			});
+		}
+	}
 };
