@@ -185,6 +185,34 @@ const resolvers = {
 				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");
+		},
+		UploadStudentBiometricData: async (
+			_,
+			{ file },
+			{ dataSources, user }
+		) => {
+			if (user) {
+				const { _studService, helpers } = dataSources;
+				// read file from request
+				const { createReadStream } = await file;
+				// read file content
+				const data = await helpers.fileRead(createReadStream());
+				if (data) {
+					const json_data = JSON.parse(data);
+					if (await _studService.IsFileValid(json_data)) {
+						await _studService.UpdateManyFinger(json_data);
+						return {
+							status: 200,
+							message: "Operation completed successfully"
+						};
+					}
+				}
+				return new ApolloError(
+					"File not properly formatted! It must be a list containing id and fingerprint props",
+					"404"
+				);
+			}
+			return new AuthenticationError("Unauthorized Access!");
 		}
 	},
 	Student: {

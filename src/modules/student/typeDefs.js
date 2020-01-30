@@ -75,6 +75,18 @@ const typeDefs = gql`
 			"Password"
 			password: String!
 		): StudentLoginResponse!
+		"Upload student biometric file"
+		UploadStudentBiometricData(
+			"File containing a list of id and fingerprint of students"
+			file: Upload!
+		): UploadResponse!
+	}
+	"File upload Response template"
+	type UploadResponse {
+		"Response status code"
+		status: Int!
+		"Response status message"
+		message: String!
 	}
 	"Student input template"
 	input StudentInput {
