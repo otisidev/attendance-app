@@ -51,7 +51,7 @@ const AttendanceSchema = new Schema(
 				}
 			}
 		],
-		cancelled: {
+		cancel: {
 			author: {
 				type: Schema.Types.ObjectId,
 				trim: true,
