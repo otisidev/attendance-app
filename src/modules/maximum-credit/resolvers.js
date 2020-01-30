@@ -4,6 +4,13 @@ const resolvers = {
 	Query: {
 		getMaximumCredits: async (_, __, { dataSources }) => {
 			return await dataSources._mService.GetMaximumCreditUnits();
+		},
+		GetMaximumCreditByDepartment: async (_, __, { dataSources }) => {
+			const { level, department } = __;
+			return await dataSources._mService.GetMaximumCreditUnitsByDepartment(
+				department,
+				level
+			);
 		}
 	},
 	Mutation: {

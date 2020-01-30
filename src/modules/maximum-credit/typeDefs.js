@@ -4,6 +4,12 @@ const typeDefs = gql`
 	extend type Query {
 		"List of MaximumCredit within the system"
 		getMaximumCredits: MaximumCreditListResponse!
+		GetMaximumCreditByDepartment(
+			"Student level"
+			level: Int!
+			"Department id"
+			department: ID!
+		): MaximumCreditResponse!
 	}
 
 	extend type Mutation {
