@@ -9,7 +9,8 @@
 	"scripts": {
 		"dev": "nodemon src/main.js",
 		"build:lambda": "netlify-lambda build src",
-		"start:lambda": "netlify-lambda serve src"
+		"start:lambda": "netlify-lambda serve src",
+		"build": " npm run lambda-build"
 	},
 	"dependencies": {
 		"apollo-server": "^2.9.16",
