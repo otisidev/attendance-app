@@ -73,7 +73,7 @@ exports.LecturerService = class LecturerService {
 					doc: { id, status: "Deleted!" }
 				};
 		}
-		throw new Error("Student not found!");
+		throw new Error("Lecturer not found!");
 	}
 
 	async UpdateFingerprint(id, finger) {
@@ -90,7 +90,7 @@ exports.LecturerService = class LecturerService {
 					doc: cb
 				};
 		}
-		throw new Error("Student not found!");
+		throw new Error("Lecturer not found!");
 	}
 
 	async UpdateAssignedCourse(id, deptCourse) {
@@ -123,5 +123,24 @@ exports.LecturerService = class LecturerService {
 				};
 		}
 		throw new Error("Lecturer not found!");
+	}
+
+	/**
+	 * Updates many Lecturer biometric data
+	 * @param {Array<any>} lecturer list of lecturer object
+	 */
+	async UpdateManyFinger(lecturer) {
+		if (lecturer.every(s => isValid(s.id))) {
+			//
+			lecturer.forEach(async item => {
+				await Model.findByIdAndUpdate(
+					{
+						removed: false,
+						_id: item.id
+					},
+					{ $set: { fingerprint: item.fingerprint } }
+				).exec();
+			});
+		}
 	}
 };
