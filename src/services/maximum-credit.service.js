@@ -59,4 +59,19 @@ exports.MaximumCreditService = class MaximumCreditService {
 			docs: cb
 		};
 	}
+	async GetMaximumCreditUnitsByDepartment(department, level) {
+		if (isValid(department) && level) {
+			const q = { removed: false, department, level };
+			const cb = await Model.findOne(q)
+				.populate("department")
+				.exec();
+
+			return {
+				status: 200,
+				message: "Completed",
+				doc: cb
+			};
+		}
+		throw new Error("Maximum credit unit not found!");
+	}
 };
