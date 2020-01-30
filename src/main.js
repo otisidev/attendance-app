@@ -13,7 +13,8 @@ const server = new ApolloServer({
 		require("./modules/log"),
 		require("./modules/department-course"),
 		require("./modules/lecturer"),
-		require("./modules/student")
+		require("./modules/student"),
+		require("./modules/attendance")
 	],
 	introspection: true,
 	dataSources: () => ({
