@@ -50,6 +50,10 @@ exports.AttendanceService = class AttendanceService {
 			];
 			// query execution
 			const result = await Model.aggregate(q).exec();
+			await Model.populate(result, {
+				model: "DepartmentalCourse",
+				path: "course"
+			});
 			// return result
 			return {
 				status: 200,
@@ -159,5 +163,26 @@ exports.AttendanceService = class AttendanceService {
 				};
 		}
 		throw new Error("Invalid attendance object!");
+	}
+
+	/**
+	 * Checks for attendance file validation
+	 * @param {Array<any>} attendance_list attendance list from file
+	 */
+	async IsFileValid(attendance_list) {
+		if (attendance_list.length) {
+			if (
+				attendance_list.every(
+					item =>
+						"departmentalCourse" in item &&
+						"lecturer" in item &&
+						"date" in item &&
+						"students" in item &&
+						typeof item.students === "object"
+				)
+			)
+				return true;
+		}
+		return false;
 	}
 };
