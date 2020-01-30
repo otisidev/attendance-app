@@ -182,17 +182,18 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 
 	/**
 	 * Gets a list of departmental course list for student
-	 * @param {string} department department id
+	 * @param {string} dept department id
 	 */
-	async GetStudentAssignableCourses(department) {
+	async GetStudentAssignableCourses(dept) {
 		// validation
-		if (isValid(department)) {
+		if (isValid(dept)) {
+			// const id = new Types.ObjectId(dept);
 			// query statement
 			const q = [
 				{
 					$match: {
 						removed: false,
-						department: Types.ObjectId(department)
+						department: dept
 					}
 				},
 				{
