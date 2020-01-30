@@ -17,9 +17,7 @@ class CoreService {
 	 */
 	GenerateToken(user) {
 		if (!user) throw new Error("Account not found!");
-		const token = sign(user, process.env.DB_KEY, {
-			expiresIn: "2h"
-		});
+		const token = sign(user, process.env.DB_KEY);
 		return token;
 	}
 
