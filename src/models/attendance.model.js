@@ -11,7 +11,7 @@ const AttendanceSchema = new Schema(
 		session: {
 			type: Schema.Types.ObjectId,
 			required: true,
-			ref: "session",
+			ref: "Session",
 			trim: true
 		},
 		lecturer: {
@@ -29,6 +29,10 @@ const AttendanceSchema = new Schema(
 		removed: {
 			type: Boolean,
 			default: false
+		},
+		date: {
+			type: Date,
+			default: true
 		},
 		students: [
 			{
@@ -68,6 +72,9 @@ const AttendanceSchema = new Schema(
 );
 AttendanceSchema.virtual("id").get(function() {
 	return this._id;
+});
+AttendanceSchema.virtual("cancelled").get(function() {
+	return this.cancelled.status;
 });
 
 AttendanceSchema.set("toJSON", { virtual: true });
