@@ -6,6 +6,7 @@ const { LogService } = require("../services/log.service");
 const { UserService } = require("../services/user.service");
 const { StudentService } = require("../services/student.service");
 const { LecturerService } = require("../services/lecturer.service");
+const { AttendanceService } = require("../services/attendance.service");
 const {
 	DepartmentalCourseService
 } = require("../services/departmental-course.service");
@@ -20,6 +21,7 @@ const _uService = new UserService();
 const _dcService = new DepartmentalCourseService();
 const _lecService = new LecturerService();
 const _studService = new StudentService();
+const _aService = new AttendanceService();
 const coreService = new CoreService();
 
 // public instance
@@ -33,7 +35,8 @@ module.exports = {
 		_uService,
 		_dcService,
 		_lecService,
-		_studService
+		_studService,
+		_aService
 	},
 	helpers: {}
 };
