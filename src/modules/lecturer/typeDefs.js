@@ -32,6 +32,11 @@ const typeDefs = gql`
 			"Fingerprint template"
 			fingerprint: ID!
 		): LecturerResponse!
+		"Upload lecturer biometric file"
+		UploadLecturerBiometricData(
+			"File containing a list of id and fingerprint of lecturer"
+			file: Upload!
+		): UploadResponse!
 	}
 	"Lecturer input template"
 	input LecturerInput {
