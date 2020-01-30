@@ -54,16 +54,11 @@ const resolvers = {
 	Mutation: {
 		UploadAttendance: async (_, { file }, { dataSources, user }) => {
 			if (user) {
-				const { _aService, _sService } = dataSources;
+				const { _aService, _sService, helpers } = dataSources;
 				// read file from request
 				const { createReadStream } = await file;
 				// read file content
-				let data;
-				// read file
-				const stream = createReadStream();
-				stream.on("readable", () => {
-					while ((data = stream.read())) console.log("File read!");
-				});
+				const data = await helpers.fileRead(createReadStream());
 				// validate file content
 				if (data) {
 					const json_data = JSON.parse(data);
