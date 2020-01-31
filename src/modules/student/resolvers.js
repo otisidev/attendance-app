@@ -74,13 +74,14 @@ const resolvers = {
 			// create student account
 			const result = await _studService.NewStudent(model, passphase);
 			// create token
-			const { id, name, reg_no, email, phone } = result.doc;
+			const { id, name, reg_no, email, phone, level } = result.doc;
 			const token = coreService.GenerateToken({
 				id,
 				name,
 				reg_no,
 				email,
-				phone
+				phone,
+				level
 			});
 			// TODO: send email notification
 
@@ -129,13 +130,14 @@ const resolvers = {
 			// password validation
 			if (!match) return new ApolloError("Incorrect credentials!");
 			// create token
-			const { id, name, reg_no, email, phone } = student_res.doc;
+			const { id, name, reg_no, email, phone, level } = student_res.doc;
 			const token = coreService.GenerateToken({
 				id,
 				name,
 				reg_no,
 				email,
-				phone
+				phone,
+				level
 			});
 			// return
 			return {

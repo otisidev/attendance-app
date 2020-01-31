@@ -172,6 +172,8 @@ const typeDefs = gql`
 		reg_no: String!
 		"Department"
 		department: Department
+		"Student level"
+		level: Int
 	}
 
 	"Student course response template"
