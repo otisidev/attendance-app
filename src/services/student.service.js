@@ -86,7 +86,9 @@ exports.StudentService = class StudentService {
 			const q = { removed: false, _id: id };
 			// Update statement
 			const u = { $set: { image } };
-			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			const cb = await Model.findOneAndUpdate(q, u, { new: true })
+				.populate("department")
+				.exec();
 			if (cb)
 				return {
 					status: 200,
@@ -102,7 +104,9 @@ exports.StudentService = class StudentService {
 			const q = { removed: false, _id: id };
 			// Update statement
 			const u = { $set: { name, phone } };
-			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			const cb = await Model.findOneAndUpdate(q, u, { new: true })
+				.populate("department")
+				.exec();
 			if (cb)
 				return {
 					status: 200,
