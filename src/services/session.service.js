@@ -12,6 +12,8 @@ exports.SessionService = class SessionService {
 	 */
 	async NewSession(model) {
 		if (model) {
+			// Stop existing
+			await StopAll();
 			const cb = await new Model(model).save();
 			if (cb)
 				return {

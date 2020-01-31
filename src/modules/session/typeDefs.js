@@ -3,28 +3,28 @@ const { gql } = require("apollo-server");
 const typeDefs = gql`
 	extend type Query {
 		"List of Session within the system"
-		getSessions: SessionListResponse!
+		GetSessions: SessionListResponse!
 		"Gets a single Session using its' id"
-		getSession("Session id" id: ID!): SessionResponse!
+		GetSession("Session id" id: ID!): SessionResponse!
 		"Get active session"
-		getActiveSession: SessionResponse!
+		GetActiveSession: SessionResponse!
 	}
 
 	extend type Mutation {
 		"Creates new Session object"
-		createSession(
+		CreateSession(
 			"New session object"
 			model: NewSessionInput!
 		): SessionResponse!
 		"Update a single Session object"
-		updateSession(
+		UpdateSession(
 			"Session id"
 			id: ID!
 			"New Session object"
 			model: NewSessionInput!
 		): SessionResponse!
 		"Update active session"
-		setActiveSession("Session id" id: ID!): SessionResponse!
+		SetActiveSession("Session id" id: ID!): SessionResponse!
 	}
 
 	"New session template"
@@ -33,6 +33,8 @@ const typeDefs = gql`
 		title: String!
 		"Session's semester"
 		semester: String!
+		"is active"
+		active: Boolean
 	}
 
 	"Session list response template"
