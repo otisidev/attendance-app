@@ -140,7 +140,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 	async GetDepartmentalCourses(department, level = null) {
 		if (isValid(department)) {
 			// query statement
-			let q = { removed: false };
+			let q = { removed: false, department };
 			// check if request is for a particular level
 			if (level) q.level = level;
 			// query execution
