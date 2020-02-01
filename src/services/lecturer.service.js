@@ -46,6 +46,29 @@ exports.LecturerService = class LecturerService {
 		throw new Error("Lecturer not found!");
 	}
 
+	/**
+	 * Geta single lecturer by email/phone/reg no
+	 * @param {string} no lecturer reg no/email/phone
+	 */
+	async GetLecturerByNo(no) {
+		if (no) {
+			const q = {
+				removed: false,
+				$or: [{ email: no }, { phone: no }, { regNo: no }]
+			};
+			const cb = await Model.findOne(q)
+				.populate("assignedCourses")
+				.exec();
+			if (cb)
+				return {
+					status: 200,
+					message: "Lecturer record found!",
+					doc: cb
+				};
+		}
+		throw new Error("Lecturer not found!");
+	}
+
 	async GetLecturers() {
 		const q = { removed: false };
 		const cb = await Model.find(q)
@@ -108,12 +131,12 @@ exports.LecturerService = class LecturerService {
 		throw new Error("Lecturer not found!");
 	}
 
-	async UpdateLecturer(id, name, phone) {
+	async UpdateLecturer(id, name, phone, reg) {
 		if (isValid(id) && name && phone) {
 			// query state
 			const q = { removed: false, _id: id };
 			// query execution
-			const u = { $set: { name, phone } };
+			const u = { $set: { name, phone, regNo: reg } };
 			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {

@@ -19,6 +19,11 @@ const LecturerSchema = new Schema(
 			trim: true,
 			unique: true
 		},
+		regNo: {
+			type: String,
+			required: false,
+			trim: true
+		},
 		fingerprint: {
 			type: Buffer,
 			required: false
@@ -48,6 +53,9 @@ LecturerSchema.virtual("id").get(function() {
 });
 LecturerSchema.virtual("assigned_courses").get(function() {
 	return this.assignedCourses;
+});
+LecturerSchema.virtual("reg_no").get(function() {
+	return this.regNo;
 });
 
 LecturerSchema.set("toJSON", { virtual: true });

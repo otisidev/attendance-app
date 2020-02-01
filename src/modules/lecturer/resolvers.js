@@ -27,11 +27,12 @@ const resolvers = {
 		},
 		UpdateLecturer: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { id, name, phone } = __;
+				const { id, name, phone, reg } = __;
 				return await dataSources._lecService.UpdateLecturer(
 					id,
 					name,
-					phone
+					phone,
+					reg
 				);
 			}
 			return new AuthenticationError("Unauthorized Access!");
