@@ -6,6 +6,11 @@ const typeDefs = gql`
 		GetLecturers: LecturerListResponse!
 		"Gets a single Lecturer using its' id"
 		GetLecturer("Lecturer id" id: ID!): LecturerResponse!
+		"Gets a single lecturer information by email/phone/reg no"
+		GetLecturerByNo(
+			"Lecturer's email/phone/reg no"
+			no: String!
+		): LecturerResponse!
 	}
 
 	extend type Mutation {

@@ -13,6 +13,12 @@ const resolvers = {
 				return await dataSources._lecService.GetLecturer(id);
 			}
 			return new AuthenticationError("Unauthorized Access!");
+		},
+		GetLecturerByNo: async (_, { no }, { dataSources, user }) => {
+			if (user) {
+				return await dataSources._lecService.GetLecturerByNo(no);
+			}
+			return new AuthenticationError("Unauthorized Access!");
 		}
 	},
 	Mutation: {
