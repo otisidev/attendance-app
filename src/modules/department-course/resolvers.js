@@ -72,7 +72,8 @@ const resolvers = {
 	},
 	DepartmentalCourse: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assgned_lecturers: ({ lecturers }) => {
+		credit_unit: ({ creditUnit }) => creditUnit,
+		assgined_lecturers: ({ lecturers }) => {
 			if (lecturers.some(i => typeof i !== "object")) return [];
 			return lecturers;
 		},

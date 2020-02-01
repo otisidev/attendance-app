@@ -101,7 +101,9 @@ const typeDefs = gql`
 		"Department object"
 		department: Department
 		"List of lecturers taking the course"
-		assgned_lecturers: [Lecturer]
+		assgined_lecturers: [Lecturer!]
+		"Credit unit"
+		credit_unit: Int!
 	}
 
 	"Student departmental course template"
