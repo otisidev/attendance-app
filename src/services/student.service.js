@@ -231,7 +231,7 @@ exports.StudentService = class StudentService {
 						},
 						courses: {
 							$push: {
-								id: "$_id",
+								id: "$registeredCourses._id",
 								course: "$registeredCourses.departmentalCourse",
 								date: "$registeredCourses.date"
 							}
