@@ -58,7 +58,7 @@ const resolvers = {
 			if (user) {
 				const { ids, lecturer } = __;
 				const result = await dataSources._dcService.AssignToLecturer(
-					id,
+					ids,
 					lecturer
 				);
 				await dataSources._lecService.UpdateAssignedCourse(
