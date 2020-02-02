@@ -241,7 +241,8 @@ const resolvers = {
 	StudentCourseModel: {
 		course: async ({ course }, _, { dataSources }) => {
 			return await dataSources.loaders.dcLoader.load(course.toString());
-		}
+		},
+		date: ({ date }) => new Date(date).toISOString()
 	}
 };
 
