@@ -56,14 +56,14 @@ const resolvers = {
 		},
 		AssignToLecturer: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { id, lecturer } = __;
+				const { ids, lecturer } = __;
 				const result = await dataSources._dcService.AssignToLecturer(
 					id,
 					lecturer
 				);
 				await dataSources._lecService.UpdateAssignedCourse(
 					lecturer,
-					id
+					ids
 				);
 				return result;
 			}

@@ -43,7 +43,7 @@ const typeDefs = gql`
 		"Assigns a single departmental course to lecturer"
 		AssignToLecturer(
 			"Departmental course id"
-			id: ID!
+			ids: [ID!]
 			"Lecturer's id"
 			lecturer: ID!
 		): DepartmentalCourseResponse!

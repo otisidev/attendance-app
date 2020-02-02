@@ -116,10 +116,10 @@ exports.LecturerService = class LecturerService {
 		throw new Error("Lecturer not found!");
 	}
 
-	async UpdateAssignedCourse(id, deptCourse) {
-		if (isValid(id) && isValid(deptCourse)) {
+	async UpdateAssignedCourse(id, deptCourses) {
+		if (isValid(id) && deptCourses.every(x => isValid(x))) {
 			const q = { removed: false, _id: id };
-			const u = { $addToSet: { assignedCourses: deptCourse } };
+			const u = { $addToSet: { assignedCourses: deptCourses } };
 			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {

@@ -86,23 +86,22 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 
 	/**
 	 * Assign lecturer to departmental course
-	 * @param {string} id departmental course id
+	 * @param {Array<string>} ids departmental course id
 	 * @param {string} lecturer Lecturer's id
 	 */
-	async AssignToLecturer(id, lecturer) {
-		if (isValid(id) && isValid(lecturer)) {
+	async AssignToLecturer(ids, lecturer) {
+		if (ids.every(c => isValid(c)) && isValid(lecturer)) {
 			// query statement
-			const q = { removed: false, _id: id };
+			const q = { removed: false, _id: { $in: ids } };
 			// update statement
 			const u = {
 				$addToSet: { lecturers: lecturer }
 			};
-			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			const cb = await Model.updateMany(q, u).exec();
 			if (cb)
 				return {
 					status: 200,
-					message: "Assigned lecturer successfully!",
-					doc: cb
+					message: "Assigned lecturer successfully!"
 				};
 		}
 		throw new Error("Failed! Departmental course not found.");
