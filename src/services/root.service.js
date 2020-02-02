@@ -26,6 +26,8 @@ const coreService = new CoreService();
 
 const { fileRead } = require("../../lib/file-reader");
 
+// dataloader
+const DataLoader = require("dataloader");
 // public instance
 module.exports = {
 	services: {
@@ -42,5 +44,25 @@ module.exports = {
 	},
 	helpers: {
 		fileRead
+	},
+	loaders: {
+		departmentLoader: new DataLoader(async ids => {
+			return await _dService.GetMany(ids);
+		}),
+		lecturerLoader: new DataLoader(async ids => {
+			return await _lecService.GetMany(ids);
+		}),
+		dcLoader: new DataLoader(async ids => {
+			return await _dcService.GetMany(ids);
+		}),
+		attendanceLoader: new DataLoader(async ids => {
+			return await _aService.GetMany(ids);
+		}),
+		studentLoader: new DataLoader(async ids => {
+			return await _studService.GetMany(ids);
+		}),
+		sessionLoader: new DataLoader(async ids => {
+			return await _sService.GetMany(ids);
+		})
 	}
 };

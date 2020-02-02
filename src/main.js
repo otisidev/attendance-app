@@ -1,6 +1,6 @@
 const { connect } = require("../context/icontext.service");
 const { ApolloServer } = require("apollo-server-lambda");
-const { services, helpers } = require("./services/root.service");
+const { services, helpers, loaders } = require("./services/root.service");
 const { verify } = require("jsonwebtoken");
 
 //  ApolloServer instance
@@ -19,7 +19,8 @@ const server = new ApolloServer({
 	introspection: true,
 	dataSources: () => ({
 		...services,
-		helpers
+		helpers,
+		loaders
 	}),
 	context: async ({ event }) => {
 		const cb = {
@@ -51,8 +52,7 @@ connect()
 	// 					console.log(`Runing @ >_ ${url}`) ||
 	// 					console.log("Pub-Sub Server @ >_ " + subscriptionsUrl)
 	// 			)
-	// 			.catch(e => console.log("SERVER ERROR: ", e.message)
-	// 			)
+	// 			.catch(e => console.log("SERVER ERROR: ", e.message))
 	// )
 	.catch(err => console.log("CONNECTION ERROR: ", err.message));
 

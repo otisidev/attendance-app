@@ -82,6 +82,34 @@ const resolvers = {
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		}
+	},
+	Attendance: {
+		departmentalCourse: async (
+			{ departmentalCourse },
+			_,
+			{ dataSources }
+		) => {
+			return await dataSources.loaders.dcLoader.load(
+				departmentalCourse.toString()
+			);
+		},
+		session: async ({ session }, _, { dataSources }) => {
+			return await dataSources.loaders.sessionLoader.load(
+				session.toString()
+			);
+		},
+		lecturer: async ({ lecturer }, _, { dataSources }) => {
+			return await dataSources.loaders.lecturerLoader.load(
+				lecturer.toString()
+			);
+		}
+	},
+	AttendanceStudent: {
+		student: async ({ student }, _, { dataSources }) => {
+			return await dataSources.loaders.studentLoader.load(
+				student.toString()
+			);
+		}
 	}
 };
 

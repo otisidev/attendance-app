@@ -90,13 +90,10 @@ const resolvers = {
 	},
 	Lecturer: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assigned_courses: ({ assigned_courses }) => {
-			if (
-				assigned_courses.length &&
-				assigned_courses.some(c => typeof c !== "object")
-			)
-				return [];
-			return assigned_courses;
+		assigned_courses: async ({ assigned_courses }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.loadMany(
+				assigned_courses.map(c => c.toString())
+			);
 		}
 	}
 };

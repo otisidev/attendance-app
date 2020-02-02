@@ -50,10 +50,7 @@ exports.AttendanceService = class AttendanceService {
 			];
 			// query execution
 			const result = await Model.aggregate(q).exec();
-			await Model.populate(result, {
-				model: "DepartmentalCourse",
-				path: "course"
-			});
+
 			// return result
 			return {
 				status: 200,
@@ -79,12 +76,6 @@ exports.AttendanceService = class AttendanceService {
 			};
 			// query execution
 			const result = await Model.find(q)
-				.populate([
-					"departmentalCourse",
-					"session",
-					"lecturer",
-					"students.student"
-				])
 				.sort({
 					departmentalCourse: 1,
 					date: -1
@@ -117,12 +108,6 @@ exports.AttendanceService = class AttendanceService {
 				.sort({
 					date: -1
 				})
-				.populate([
-					"departmentalCourse",
-					"session",
-					"lecturer",
-					"students.student"
-				])
 				.exec();
 
 			return {
@@ -184,5 +169,16 @@ exports.AttendanceService = class AttendanceService {
 				return true;
 		}
 		return false;
+	}
+
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };

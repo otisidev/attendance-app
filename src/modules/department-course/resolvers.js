@@ -73,13 +73,15 @@ const resolvers = {
 	DepartmentalCourse: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
 		credit_unit: ({ creditUnit }) => creditUnit,
-		assgined_lecturers: ({ lecturers }) => {
-			if (lecturers.some(i => typeof i !== "object")) return [];
-			return lecturers;
+		assgined_lecturers: async ({ lecturers }, _, { dataSources }) => {
+			return await dataSources.loaders.lecturerLoader.loadMany(
+				lecturers.map(c => c.toString())
+			);
 		},
-		department: ({ department }) => {
-			if (typeof department !== "object") return null;
-			return department;
+		department: async ({ department }, _, { dataSources }) => {
+			return await dataSources.loaders.departmentLoader.load(
+				department.toString()
+			);
 		}
 	}
 };

@@ -144,9 +144,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 			if (level) q.level = level;
 			// query execution
 			const cb = await Model.find(q)
-				.populate("lecturers") // include lecturers' object
 				.sort({ level: 1, semester: 1 }) //  sort the record by level in ascending other and by semester by the same order
-				.select("-department") // exclude department id/object
 				.exec();
 
 			return {
@@ -186,13 +184,12 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 	async GetStudentAssignableCourses(dept) {
 		// validation
 		if (isValid(dept)) {
-			// const id = new Types.ObjectId(dept);
 			// query statement
 			const q = [
 				{
 					$match: {
 						removed: false,
-						department: dept
+						department: Types.ObjectId(dept)
 					}
 				},
 				{
@@ -245,5 +242,15 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 			};
 		}
 		throw new Error("Departmental course not found!");
+	}
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };

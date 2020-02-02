@@ -55,6 +55,17 @@ const resolvers = {
 			if (user) {
 				//
 				const { _sService, _studService } = dataSources;
+				// check if student has registered for any course
+				const status = await _studService.HasRegisteredCourse(
+					user.level,
+					user.id
+				);
+				if (status) {
+					return new ApolloError(
+						"You've completed course registration for current session",
+						"404"
+					);
+				}
 				// session
 				const session_res = await _sService.GetActiveSession();
 				const result = await _studService.GetStudentRegisteredCourseList(
@@ -219,17 +230,27 @@ const resolvers = {
 	},
 	Student: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assigned_courses: ({ assigned_courses }) => {
-			if (
-				assigned_courses.length &&
-				assigned_courses.some(c => typeof c !== "object")
-			)
-				return [];
-			return assigned_courses;
+		assigned_courses: async ({ assigned_courses }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.loadMany(
+				assigned_courses.map(x => x.toString())
+			);
 		},
-		department: ({ department }) => {
-			if (typeof department !== "object") return null;
-			return department;
+		department: async ({ department }, _, { dataSources }) => {
+			return await dataSources.loaders.departmentLoader.load(
+				department.toString()
+			);
+		}
+	},
+	StudentRegisteredCourseModel: {
+		session: async ({ session }, _, { dataSources }) => {
+			return await dataSources.loaders.sessionLoader.load(
+				session.toString()
+			);
+		}
+	},
+	StudentCourseModel: {
+		course: async ({ course }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.load(course.toString());
 		}
 	}
 };

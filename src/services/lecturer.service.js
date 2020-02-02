@@ -13,10 +13,7 @@ exports.LecturerService = class LecturerService {
 				...model,
 				author
 			}).save();
-			await Model.populate(cb, {
-				model: "DepartmentalCourse",
-				path: "assignedCourses"
-			});
+
 			if (cb)
 				return {
 					status: 200,
@@ -33,9 +30,7 @@ exports.LecturerService = class LecturerService {
 				removed: false,
 				_id: id
 			};
-			const cb = await Model.findOne(q)
-				.populate("assignedCourses")
-				.exec();
+			const cb = await Model.findOne(q).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -56,9 +51,7 @@ exports.LecturerService = class LecturerService {
 				removed: false,
 				$or: [{ email: no }, { phone: no }, { regNo: no }]
 			};
-			const cb = await Model.findOne(q)
-				.populate("assignedCourses")
-				.exec();
+			const cb = await Model.findOne(q).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -72,7 +65,6 @@ exports.LecturerService = class LecturerService {
 	async GetLecturers() {
 		const q = { removed: false };
 		const cb = await Model.find(q)
-			.populate("assignedCourses")
 			.sort({ name: 1 })
 			.exec();
 		return {
@@ -165,5 +157,16 @@ exports.LecturerService = class LecturerService {
 				).exec();
 			});
 		}
+	}
+
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };
