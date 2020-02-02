@@ -55,17 +55,7 @@ const resolvers = {
 			if (user) {
 				//
 				const { _sService, _studService } = dataSources;
-				// check if student has registered for any course
-				const status = await _studService.HasRegisteredCourse(
-					user.level,
-					user.id
-				);
-				if (status) {
-					return new ApolloError(
-						"You've completed course registration for current session",
-						"404"
-					);
-				}
+
 				// session
 				const session_res = await _sService.GetActiveSession();
 				const result = await _studService.GetStudentRegisteredCourseList(

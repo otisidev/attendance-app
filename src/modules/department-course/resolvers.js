@@ -22,6 +22,16 @@ const resolvers = {
 			if (user) {
 				// user is meant to be student
 				const { _dcService, _studService } = dataSources;
+				const status = await _studService.HasRegisteredCourse(
+					user.level,
+					user.id
+				);
+				if (status) {
+					return new ApolloError(
+						"You've completed course registration for current session",
+						"404"
+					);
+				}
 				//  get a single student
 				const student_res = await _studService.GetStudentByid(user.id);
 				// get department
