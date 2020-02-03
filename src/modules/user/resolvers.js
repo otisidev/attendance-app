@@ -21,6 +21,10 @@ const resolvers = {
 				return await dataSources._uService.GetUsers(page, limit);
 			}
 			return new AuthenticationError("Unauthorized Access!");
+		},
+		HasAdmin: async (_, __, { dataSources }) => {
+			const status = await dataSources._uService.IsFirstUserAccount();
+			return !status;
 		}
 	},
 	Mutation: {
