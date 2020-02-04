@@ -17,11 +17,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 		if (model && isValid(model.department)) {
 			// save
 			const cb = await new Model(model).save();
-			// include department object
-			await Model.populate(cb, {
-				model: "Department",
-				path: "department"
-			});
+
 			if (cb)
 				return {
 					status: 200,
@@ -52,9 +48,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 				}
 			};
 			// query execution
-			const cb = await Model.findOneAndUpdate(q, u, { new: true })
-				.populate("department")
-				.exec();
+			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -164,9 +158,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 		if (isValid(id)) {
 			// query statement
 			const q = { removed: false, _id: id };
-			const cb = await Model.findOne(q)
-				.populate(["department ", "lecturers"])
-				.exec();
+			const cb = await Model.findOne(q).exec();
 
 			return {
 				status: 200,
