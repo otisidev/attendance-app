@@ -17,10 +17,7 @@ exports.StudentService = class StudentService {
 				...model,
 				passphase: password
 			}).save();
-			await Model.populate(cb, {
-				model: "Department",
-				path: "department"
-			});
+
 			if (cb)
 				return {
 					status: 200,

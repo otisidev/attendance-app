@@ -1,10 +1,8 @@
-const {
-	DepartmentalCourseModel
-} = require("../models/departmental-course.model");
+const _model = require("../models/departmental-course.model");
 const { Types } = require("mongoose");
 
 // local props
-const Model = DepartmentalCourseModel;
+const Model = _model.DepartmentalCourseModel;
 const { isValid } = Types.ObjectId;
 
 exports.DepartmentalCourseService = class DepartmentalCourseService {
