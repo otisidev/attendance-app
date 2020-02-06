@@ -91,4 +91,15 @@ exports.DepartmentService = class DepartmentService {
 		}
 		throw new Error("Department not found!");
 	}
+
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
+	}
 };

@@ -106,7 +106,7 @@ const typeDefs = gql`
 		"Session"
 		session: Session
 		"departmental course"
-		departmentalCourse: DepartmentalCourse
+		departmentalCourse: DepartmentalCourse!
 	}
 	type AttendanceStudent {
 		student: Student

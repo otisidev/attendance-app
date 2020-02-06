@@ -11,6 +11,9 @@ const typeDefs = gql`
 			"Maxmimum record per request"
 			limit: Int
 		): UserListResponse!
+
+		"Checks if the system has been setup"
+		HasAdmin: Boolean!
 	}
 
 	extend type Mutation {

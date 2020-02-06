@@ -17,10 +17,7 @@ exports.StudentService = class StudentService {
 				...model,
 				passphase: password
 			}).save();
-			await Model.populate(cb, {
-				model: "Department",
-				path: "department"
-			});
+
 			if (cb)
 				return {
 					status: 200,
@@ -120,9 +117,7 @@ exports.StudentService = class StudentService {
 	async GetStudentByid(id) {
 		if (isValid(id)) {
 			const q = { removed: false, _id: id };
-			const cb = await Model.findOne(q)
-				.populate("department")
-				.exec();
+			const cb = await Model.findOne(q).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -143,9 +138,7 @@ exports.StudentService = class StudentService {
 				removed: false,
 				$or: [{ regNo: id }, { email: id }, { phone: id }]
 			};
-			const cb = await Model.findOne(q)
-				.populate("department")
-				.exec();
+			const cb = await Model.findOne(q).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -175,8 +168,7 @@ exports.StudentService = class StudentService {
 		const opt = {
 			page,
 			limit,
-			sort: { name: 1 },
-			populate: ["department"]
+			sort: { name: 1 }
 		};
 		const cb = await Model.paginate(q, opt);
 		return {
@@ -225,8 +217,7 @@ exports.StudentService = class StudentService {
 				{ $unwind: "$registeredCourses" },
 				{
 					$match: {
-						_id: Types.ObjectId(id),
-						"registeredCourses.session": Types.ObjectId(session)
+						_id: Types.ObjectId(id)
 					}
 				},
 				{
@@ -237,12 +228,17 @@ exports.StudentService = class StudentService {
 						},
 						courses: {
 							$push: {
-								_id: "$_id",
-								course: "$departmentalCourse",
-								date: "$date"
+								id: "$registeredCourses._id",
+								course: "$registeredCourses.departmentalCourse",
+								date: "$registeredCourses.date"
 							}
 						},
 						total: { $sum: 1 }
+					}
+				},
+				{
+					$sort: {
+						level: -1
 					}
 				},
 				{
@@ -255,14 +251,8 @@ exports.StudentService = class StudentService {
 					}
 				}
 			];
-
 			// query execution
 			const result = await Model.aggregate(q).exec();
-			// populdate
-			await Model.populate(result, [
-				{ model: "Session", path: "session" },
-				{ model: "DepartmentalCourse", path: "courses.course" }
-			]);
 
 			return {
 				status: 200,
@@ -272,7 +262,23 @@ exports.StudentService = class StudentService {
 		}
 		throw new Error("Student not found!");
 	}
+	/**
+	 * Checks if student has registered for any course to his current level
+	 * @param {number} level student level
+	 * @param {string} id student id
+	 */
+	async HasRegisteredCourse(level, id) {
+		if (isValid(id) && level) {
+			const q = {
+				removed: false,
+				_id: id,
+				"registeredCourses.level": level
+			};
 
+			const count = await Model.countDocuments(q).exec();
+			return count > 0;
+		}
+	}
 	/**
 	 * Updates student session course
 	 * @param {string} id student id
@@ -345,5 +351,16 @@ exports.StudentService = class StudentService {
 				).exec();
 			});
 		}
+	}
+
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };

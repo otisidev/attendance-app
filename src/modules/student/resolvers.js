@@ -55,6 +55,7 @@ const resolvers = {
 			if (user) {
 				//
 				const { _sService, _studService } = dataSources;
+
 				// session
 				const session_res = await _sService.GetActiveSession();
 				const result = await _studService.GetStudentRegisteredCourseList(
@@ -74,13 +75,14 @@ const resolvers = {
 			// create student account
 			const result = await _studService.NewStudent(model, passphase);
 			// create token
-			const { id, name, reg_no, email, phone } = result.doc;
+			const { id, name, reg_no, email, phone, level } = result.doc;
 			const token = coreService.GenerateToken({
 				id,
 				name,
 				reg_no,
 				email,
-				phone
+				phone,
+				level
 			});
 			// TODO: send email notification
 
@@ -129,13 +131,14 @@ const resolvers = {
 			// password validation
 			if (!match) return new ApolloError("Incorrect credentials!");
 			// create token
-			const { id, name, reg_no, email, phone } = student_res.doc;
+			const { id, name, reg_no, email, phone, level } = student_res.doc;
 			const token = coreService.GenerateToken({
 				id,
 				name,
 				reg_no,
 				email,
-				phone
+				phone,
+				level
 			});
 			// return
 			return {
@@ -217,18 +220,29 @@ const resolvers = {
 	},
 	Student: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assigned_courses: ({ assigned_courses }) => {
-			if (
-				assigned_courses.length &&
-				assigned_courses.some(c => typeof c !== "object")
-			)
-				return [];
-			return assigned_courses;
+		assigned_courses: async ({ assigned_courses }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.loadMany(
+				assigned_courses.map(x => x.toString())
+			);
 		},
-		department: ({ department }) => {
-			if (typeof department !== "object") return null;
-			return department;
+		department: async ({ department }, _, { dataSources }) => {
+			return await dataSources.loaders.departmentLoader.load(
+				department.toString()
+			);
 		}
+	},
+	StudentRegisteredCourseModel: {
+		session: async ({ session }, _, { dataSources }) => {
+			return await dataSources.loaders.sessionLoader.load(
+				session.toString()
+			);
+		}
+	},
+	StudentCourseModel: {
+		course: async ({ course }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.load(course.toString());
+		},
+		date: ({ date }) => new Date(date).toISOString()
 	}
 };
 

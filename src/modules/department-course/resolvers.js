@@ -1,4 +1,4 @@
-const { AuthenticationError } = require("apollo-server");
+const { AuthenticationError, ApolloError } = require("apollo-server");
 
 const resolvers = {
 	Query: {
@@ -22,6 +22,16 @@ const resolvers = {
 			if (user) {
 				// user is meant to be student
 				const { _dcService, _studService } = dataSources;
+				const status = await _studService.HasRegisteredCourse(
+					user.level,
+					user.id
+				);
+				if (status) {
+					return new ApolloError(
+						"You've completed course registration for current session",
+						"404"
+					);
+				}
 				//  get a single student
 				const student_res = await _studService.GetStudentByid(user.id);
 				// get department
@@ -56,14 +66,14 @@ const resolvers = {
 		},
 		AssignToLecturer: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { id, lecturer } = __;
+				const { ids, lecturer } = __;
 				const result = await dataSources._dcService.AssignToLecturer(
-					id,
+					ids,
 					lecturer
 				);
 				await dataSources._lecService.UpdateAssignedCourse(
 					lecturer,
-					id
+					ids
 				);
 				return result;
 			}
@@ -72,13 +82,16 @@ const resolvers = {
 	},
 	DepartmentalCourse: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assgned_lecturers: ({ lecturers }) => {
-			if (lecturers.some(i => typeof i !== "object")) return [];
-			return lecturers;
+		credit_unit: ({ creditUnit }) => creditUnit,
+		assgined_lecturers: async ({ lecturers }, _, { dataSources }) => {
+			return await dataSources.loaders.lecturerLoader.loadMany(
+				lecturers.map(c => c.toString())
+			);
 		},
-		department: ({ department }) => {
-			if (typeof department !== "object") return null;
-			return department;
+		department: async ({ department }, _, { dataSources }) => {
+			return await dataSources.loaders.departmentLoader.load(
+				department.toString()
+			);
 		}
 	}
 };

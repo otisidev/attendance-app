@@ -13,10 +13,7 @@ exports.LecturerService = class LecturerService {
 				...model,
 				author
 			}).save();
-			await Model.populate(cb, {
-				model: "DepartmentalCourse",
-				path: "assignedCourses"
-			});
+
 			if (cb)
 				return {
 					status: 200,
@@ -33,9 +30,28 @@ exports.LecturerService = class LecturerService {
 				removed: false,
 				_id: id
 			};
-			const cb = await Model.findOne(q)
-				.populate("assignedCourses")
-				.exec();
+			const cb = await Model.findOne(q).exec();
+			if (cb)
+				return {
+					status: 200,
+					message: "Lecturer record found!",
+					doc: cb
+				};
+		}
+		throw new Error("Lecturer not found!");
+	}
+
+	/**
+	 * Geta single lecturer by email/phone/reg no
+	 * @param {string} no lecturer reg no/email/phone
+	 */
+	async GetLecturerByNo(no) {
+		if (no) {
+			const q = {
+				removed: false,
+				$or: [{ email: no }, { phone: no }, { regNo: no }]
+			};
+			const cb = await Model.findOne(q).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -49,7 +65,6 @@ exports.LecturerService = class LecturerService {
 	async GetLecturers() {
 		const q = { removed: false };
 		const cb = await Model.find(q)
-			.populate("assignedCourses")
 			.sort({ name: 1 })
 			.exec();
 		return {
@@ -93,10 +108,10 @@ exports.LecturerService = class LecturerService {
 		throw new Error("Lecturer not found!");
 	}
 
-	async UpdateAssignedCourse(id, deptCourse) {
-		if (isValid(id) && isValid(deptCourse)) {
+	async UpdateAssignedCourse(id, deptCourses) {
+		if (isValid(id) && deptCourses.every(x => isValid(x))) {
 			const q = { removed: false, _id: id };
-			const u = { $addToSet: { assignedCourses: deptCourse } };
+			const u = { $addToSet: { assignedCourses: deptCourses } };
 			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {
@@ -108,12 +123,12 @@ exports.LecturerService = class LecturerService {
 		throw new Error("Lecturer not found!");
 	}
 
-	async UpdateLecturer(id, name, phone) {
+	async UpdateLecturer(id, name, phone, reg) {
 		if (isValid(id) && name && phone) {
 			// query state
 			const q = { removed: false, _id: id };
 			// query execution
-			const u = { $set: { name, phone } };
+			const u = { $set: { name, phone, regNo: reg } };
 			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {
@@ -142,5 +157,16 @@ exports.LecturerService = class LecturerService {
 				).exec();
 			});
 		}
+	}
+
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };

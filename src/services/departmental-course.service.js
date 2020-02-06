@@ -1,10 +1,8 @@
-const {
-	DepartmentalCourseModel
-} = require("../models/departmental-course.model");
+const _model = require("../models/departmental-course.model");
 const { Types } = require("mongoose");
 
 // local props
-const Model = DepartmentalCourseModel;
+const Model = _model.DepartmentalCourseModel;
 const { isValid } = Types.ObjectId;
 
 exports.DepartmentalCourseService = class DepartmentalCourseService {
@@ -17,11 +15,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 		if (model && isValid(model.department)) {
 			// save
 			const cb = await new Model(model).save();
-			// include department object
-			await Model.populate(cb, {
-				model: "Department",
-				path: "department"
-			});
+
 			if (cb)
 				return {
 					status: 200,
@@ -52,9 +46,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 				}
 			};
 			// query execution
-			const cb = await Model.findOneAndUpdate(q, u, { new: true })
-				.populate("department")
-				.exec();
+			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {
 					status: 200,
@@ -86,23 +78,22 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 
 	/**
 	 * Assign lecturer to departmental course
-	 * @param {string} id departmental course id
+	 * @param {Array<string>} ids departmental course id
 	 * @param {string} lecturer Lecturer's id
 	 */
-	async AssignToLecturer(id, lecturer) {
-		if (isValid(id) && isValid(lecturer)) {
+	async AssignToLecturer(ids, lecturer) {
+		if (ids.every(c => isValid(c)) && isValid(lecturer)) {
 			// query statement
-			const q = { removed: false, _id: id };
+			const q = { removed: false, _id: { $in: ids } };
 			// update statement
 			const u = {
 				$addToSet: { lecturers: lecturer }
 			};
-			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
+			const cb = await Model.updateMany(q, u).exec();
 			if (cb)
 				return {
 					status: 200,
-					message: "Assigned lecturer successfully!",
-					doc: cb
+					message: "Assigned lecturer successfully!"
 				};
 		}
 		throw new Error("Failed! Departmental course not found.");
@@ -140,14 +131,12 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 	async GetDepartmentalCourses(department, level = null) {
 		if (isValid(department)) {
 			// query statement
-			let q = { removed: false };
+			let q = { removed: false, department };
 			// check if request is for a particular level
 			if (level) q.level = level;
 			// query execution
 			const cb = await Model.find(q)
-				.populate("lecturers") // include lecturers' object
 				.sort({ level: 1, semester: 1 }) //  sort the record by level in ascending other and by semester by the same order
-				.select("-department") // exclude department id/object
 				.exec();
 
 			return {
@@ -167,9 +156,7 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 		if (isValid(id)) {
 			// query statement
 			const q = { removed: false, _id: id };
-			const cb = await Model.findOne(q)
-				.populate(["department ", "lecturers"])
-				.exec();
+			const cb = await Model.findOne(q).exec();
 
 			return {
 				status: 200,
@@ -187,13 +174,12 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 	async GetStudentAssignableCourses(dept) {
 		// validation
 		if (isValid(dept)) {
-			// const id = new Types.ObjectId(dept);
 			// query statement
 			const q = [
 				{
 					$match: {
 						removed: false,
-						department: dept
+						department: Types.ObjectId(dept)
 					}
 				},
 				{
@@ -246,5 +232,15 @@ exports.DepartmentalCourseService = class DepartmentalCourseService {
 			};
 		}
 		throw new Error("Departmental course not found!");
+	}
+	async GetMany(ids) {
+		const m = ids.sort();
+		// query
+		const q = { _id: { $in: m } };
+		// execute query
+		const cb = await Model.find(q)
+			.sort({ _id: 1 })
+			.exec();
+		return cb;
 	}
 };

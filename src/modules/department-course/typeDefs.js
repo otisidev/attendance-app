@@ -43,7 +43,7 @@ const typeDefs = gql`
 		"Assigns a single departmental course to lecturer"
 		AssignToLecturer(
 			"Departmental course id"
-			id: ID!
+			ids: [ID!]
 			"Lecturer's id"
 			lecturer: ID!
 		): DepartmentalCourseResponse!
@@ -101,7 +101,9 @@ const typeDefs = gql`
 		"Department object"
 		department: Department
 		"List of lecturers taking the course"
-		assgned_lecturers: [Lecturer]
+		assgined_lecturers: [Lecturer!]
+		"Credit unit"
+		credit_unit: Int!
 	}
 
 	"Student departmental course template"

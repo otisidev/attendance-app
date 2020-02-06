@@ -13,6 +13,12 @@ const resolvers = {
 				return await dataSources._lecService.GetLecturer(id);
 			}
 			return new AuthenticationError("Unauthorized Access!");
+		},
+		GetLecturerByNo: async (_, { no }, { dataSources, user }) => {
+			if (user) {
+				return await dataSources._lecService.GetLecturerByNo(no);
+			}
+			return new AuthenticationError("Unauthorized Access!");
 		}
 	},
 	Mutation: {
@@ -27,11 +33,12 @@ const resolvers = {
 		},
 		UpdateLecturer: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { id, name, phone } = __;
+				const { id, name, phone, reg } = __;
 				return await dataSources._lecService.UpdateLecturer(
 					id,
 					name,
-					phone
+					phone,
+					reg
 				);
 			}
 			return new AuthenticationError("Unauthorized Access!");
@@ -83,13 +90,10 @@ const resolvers = {
 	},
 	Lecturer: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
-		assigned_courses: ({ assigned_courses }) => {
-			if (
-				assigned_courses.length &&
-				assigned_courses.some(c => typeof c !== "object")
-			)
-				return [];
-			return assigned_courses;
+		assigned_courses: async ({ assigned_courses }, _, { dataSources }) => {
+			return await dataSources.loaders.dcLoader.loadMany(
+				assigned_courses.map(c => c.toString())
+			);
 		}
 	}
 };

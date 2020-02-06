@@ -6,6 +6,11 @@ const typeDefs = gql`
 		GetLecturers: LecturerListResponse!
 		"Gets a single Lecturer using its' id"
 		GetLecturer("Lecturer id" id: ID!): LecturerResponse!
+		"Gets a single lecturer information by email/phone/reg no"
+		GetLecturerByNo(
+			"Lecturer's email/phone/reg no"
+			no: String!
+		): LecturerResponse!
 	}
 
 	extend type Mutation {
@@ -22,6 +27,8 @@ const typeDefs = gql`
 			name: String!
 			"Phone number"
 			phone: String!
+			"lecturer reg no"
+			reg: String
 		): LecturerResponse!
 		"Removes a single Lecturer object"
 		DeleteLecturer("Lecturer id" id: ID!): DeletedResponse!
@@ -46,6 +53,8 @@ const typeDefs = gql`
 		email: String!
 		"lecturer's phone number"
 		phone: String!
+		"reg no"
+		regNo: String
 	}
 
 	"Lecturer list response template"
@@ -83,6 +92,8 @@ const typeDefs = gql`
 		created_at: String!
 		"Assigned departmental course"
 		assigned_courses: [DepartmentalCourse!]
+		"Reg no"
+		reg_no: String
 	}
 `;
 

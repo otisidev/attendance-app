@@ -2,24 +2,24 @@
 
 const resolvers = {
 	Query: {
-		getSessions: async (_, __, { dataSources }) => {
+		GetSessions: async (_, __, { dataSources }) => {
 			return await dataSources._sService.GetSessions();
 		},
-		getSession: async (_, { id }, { dataSources }) => {
+		GetSession: async (_, { id }, { dataSources }) => {
 			return await dataSources._sService.GetSession(id);
 		},
-		getActiveSession: async (_, __, { dataSources }) => {
+		GetActiveSession: async (_, __, { dataSources }) => {
 			return await dataSources._sService.GetActiveSession();
 		}
 	},
 	Mutation: {
-		createSession: async (_, { model }, { dataSources }) => {
+		CreateSession: async (_, { model }, { dataSources }) => {
 			return await dataSources._sService.NewSession(model);
 		},
-		updateSession: async (_, { id, model }, { dataSources }) => {
+		UpdateSession: async (_, { id, model }, { dataSources }) => {
 			return await dataSources._sService.UpdateSession(id, model);
 		},
-		setActiveSession: async (_, { id }, { dataSources }) => {
+		SetActiveSession: async (_, { id }, { dataSources }) => {
 			return await dataSources._sService.SetActiveSession(id);
 		}
 	},

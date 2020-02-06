@@ -7,6 +7,7 @@ const { UserService } = require("../services/user.service");
 const { StudentService } = require("../services/student.service");
 const { LecturerService } = require("../services/lecturer.service");
 const { AttendanceService } = require("../services/attendance.service");
+const { ExemptionService } = require("../services/exemption.service");
 const {
 	DepartmentalCourseService
 } = require("../services/departmental-course.service");
@@ -23,9 +24,12 @@ const _lecService = new LecturerService();
 const _studService = new StudentService();
 const _aService = new AttendanceService();
 const coreService = new CoreService();
+const _eService = new ExemptionService();
 
 const { fileRead } = require("../../lib/file-reader");
 
+// dataloader
+const DataLoader = require("dataloader");
 // public instance
 module.exports = {
 	services: {
@@ -38,9 +42,30 @@ module.exports = {
 		_dcService,
 		_lecService,
 		_studService,
-		_aService
+		_aService,
+		_eService
 	},
 	helpers: {
 		fileRead
+	},
+	loaders: {
+		departmentLoader: new DataLoader(async ids => {
+			return await _dService.GetMany(ids);
+		}),
+		lecturerLoader: new DataLoader(async ids => {
+			return await _lecService.GetMany(ids);
+		}),
+		dcLoader: new DataLoader(async ids => {
+			return await _dcService.GetMany(ids);
+		}),
+		attendanceLoader: new DataLoader(async ids => {
+			return await _aService.GetMany(ids);
+		}),
+		studentLoader: new DataLoader(async ids => {
+			return await _studService.GetMany(ids);
+		}),
+		sessionLoader: new DataLoader(async ids => {
+			return await _sService.GetMany(ids);
+		})
 	}
 };

@@ -1,6 +1,6 @@
 const { connect } = require("../context/icontext.service");
-const { ApolloServer } = require("apollo-server");
-const { services, helpers } = require("./services/root.service");
+const { ApolloServer } = require("apollo-server-lambda");
+const { services, helpers, loaders } = require("./services/root.service");
 const { verify } = require("jsonwebtoken");
 
 //  ApolloServer instance
@@ -19,38 +19,47 @@ const server = new ApolloServer({
 	introspection: true,
 	dataSources: () => ({
 		...services,
-		helpers
+		helpers,
+		loaders
 	}),
-	context: async ({ req }) => {
-		let _obj = { ip: req.ip, userAgent: req.headers["user-agent"] };
-		const auth = req.headers.authorization;
+	context: async ({ event }) => {
+		const cb = {
+			userAgent: event.headers["user-agent"]
+		};
+		const auth = event.headers.authorization || "";
 		if (auth) {
 			const token = auth.split(" ")[1];
+			// check if token is null or empty
 			if (token) {
-				try {
-					const user = verify(token, process.env.DB_KEY);
-					if (user) _obj.user = user;
-				} catch (error) {
-					// console.log("Token Verifiction: ", error.message);
-				}
+				// try to verify the token
+				const user = verify(token, process.env.DB_KEY);
+				if (user) cb.user = user;
 			}
 		}
-		return _obj;
+		return cb;
 	}
 });
 
 // init database connection
 connect()
-	.then(
-		status =>
-			status === true &&
-			server
-				.listen(4900)
-				.then(
-					({ url, subscriptionsUrl }) =>
-						console.log(`Runing @ >_ ${url}`) ||
-						console.log("Pub-Sub Server @ >_ " + subscriptionsUrl)
-				)
-				.catch(e => console.log("SERVER ERROR: ", e.message))
-	)
+	// .then(
+	// 	status =>
+	// 		status === true &&
+	// 		server
+	// 			.listen(4900)
+	// 			.then(
+	// 				({ url, subscriptionsUrl }) =>
+	// 					console.log(`Runing @ >_ ${url}`) ||
+	// 					console.log("Pub-Sub Server @ >_ " + subscriptionsUrl)
+	// 			)
+	// 			.catch(e => console.log("SERVER ERROR: ", e.message))
+	// )
 	.catch(err => console.log("CONNECTION ERROR: ", err.message));
+
+exports.handler = server.createHandler({
+	cors: {
+		origin: "*",
+		methods: "*",
+		allowedHeaders: "*"
+	}
+});
