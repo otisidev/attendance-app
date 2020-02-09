@@ -4,12 +4,9 @@ const resolvers = {
 	Query: {
 		GetStudentsByDepartment: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { department: d, page, limit } = __;
-				return await dataSources._studService.GetStudentsByDepartment(
-					d,
-					page,
-					limit
-				);
+				const { department: d, level } = __;
+				const { _studService } = dataSources;
+				return await _studService.GetStudentsByDepartment(d, level);
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},
@@ -104,12 +101,17 @@ const resolvers = {
 			return new AuthenticationError("Unauthorized Access!");
 		},
 		UpdateStudentBiometric: async (_, __, { dataSources, user }) => {
+			// validation
 			if (user) {
-				const { id, fingerprint: finger } = __;
-				return await dataSources._studService.UpdateFingerprint(
-					id,
-					finger
+				const { model } = __;
+				const { _fService, _studService } = dataSources;
+				const result = _studService.UpdateFingerprint(
+					model.student,
+					model.template
 				);
+				// Update finger print model
+				await _fService.LogNew(model);
+				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},

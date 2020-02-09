@@ -2,14 +2,12 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
 	extend type Query {
-		"List of Student in a particular department"
+		"List of Student in a particular department and level"
 		GetStudentsByDepartment(
 			"Department id"
-			departmental: ID!
-			"Page no"
-			page: Int
-			"Maximum record per request"
-			limit: Int
+			department: ID!
+			"student's level"
+			level: Int!
 		): StudentListResponse!
 		"List of Student in a the entire campus"
 		GetStudents(
@@ -49,10 +47,8 @@ const typeDefs = gql`
 		DeleteStudent("Student id" id: ID!): DeletedResponse!
 		"Update a single Student's fingerprint data"
 		UpdateStudentBiometric(
-			"Student's id"
-			id: ID!
-			"Fingerprint template"
-			fingerprint: ID!
+			"Finger print update model"
+			model: FingerUpdateModel!
 		): StudentResponse!
 
 		"Updates student current level"
@@ -116,18 +112,6 @@ const typeDefs = gql`
 		message: String!
 		"Request data"
 		docs: [Student!]
-		"Page number"
-		page: Int
-		"Maximum record per request"
-		limit: Int
-		"Total number of document"
-		totalDocs: Int
-		"Total pages"
-		totalPages: Int
-		"Next page number"
-		nextPage: Int
-		"Previous page number"
-		prevPage: Int
 	}
 	"Single Student response template"
 	type StudentResponse {
@@ -173,7 +157,7 @@ const typeDefs = gql`
 		"Department"
 		department: Department
 		"Student level"
-		level: Int
+		level: Int!
 	}
 
 	"Student course response template"
@@ -205,6 +189,19 @@ const typeDefs = gql`
 		date: String!
 		"Department course object"
 		course: DepartmentalCourse!
+	}
+
+	input FingerUpdateModel {
+		"Reason for changing fingerprint"
+		reason: String!
+		"New finger index"
+		newFinger: Int!
+		"Old finger index"
+		prevFinger: Int!
+		"Student id"
+		student: ID!
+		"Fingerprint template"
+		template: ID!
 	}
 `;
 

@@ -34,10 +34,8 @@ const typeDefs = gql`
 		DeleteLecturer("Lecturer id" id: ID!): DeletedResponse!
 		"Update a single lecturer's fingerprint data"
 		UpdateLecturerBiometric(
-			"lecturer's id"
-			id: ID!
-			"Fingerprint template"
-			fingerprint: ID!
+			"lecturer fingerprint model"
+			model: FingerUpdateModel!
 		): LecturerResponse!
 		"Upload lecturer biometric file"
 		UploadLecturerBiometricData(

@@ -45,11 +45,15 @@ const resolvers = {
 		},
 		UpdateLecturerBiometric: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { id, fingerprint: finger } = __;
-				return await dataSources._lecService.UpdateFingerprint(
-					id,
-					finger
+				const { model } = __;
+				const { _lecService, _fService } = dataSources;
+				const result = await _lecService.UpdateFingerprint(
+					model.student,
+					model.template
 				);
+				// await
+				await _fService.LogNew(model);
+				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},

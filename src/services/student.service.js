@@ -149,13 +149,14 @@ exports.StudentService = class StudentService {
 		throw new Error("Student not found!");
 	}
 
-	async GetStudentsByDepartment(department, page = 1, limit = 25) {
-		if (isValid(department)) {
-			const q = { removed: false, department };
-			const opt = { page, limit, sort: { name: 1 } };
-			const cb = await Model.paginate(q, opt);
+	async GetStudentsByDepartment(department, level) {
+		if (isValid(department) && level) {
+			const q = { removed: false, department, level };
+			const cb = await Model.find(q)
+				.sort({ name: -1 })
+				.exec();
 			return {
-				...cb,
+				docs: cb,
 				status: 200,
 				message: "Completed"
 			};

@@ -11,6 +11,7 @@ const { ExemptionService } = require("../services/exemption.service");
 const {
 	DepartmentalCourseService
 } = require("../services/departmental-course.service");
+const FS = require("../services/fingerprint.service");
 const { CoreService } = require("../../context/core.lib");
 
 // service instance
@@ -25,6 +26,7 @@ const _studService = new StudentService();
 const _aService = new AttendanceService();
 const coreService = new CoreService();
 const _eService = new ExemptionService();
+const _fService = new FS.FingerPrintService();
 
 const { fileRead } = require("../../lib/file-reader");
 
@@ -43,7 +45,8 @@ module.exports = {
 		_lecService,
 		_studService,
 		_aService,
-		_eService
+		_eService,
+		_fService
 	},
 	helpers: {
 		fileRead
