@@ -96,7 +96,7 @@ exports.LecturerService = class LecturerService {
 			// query
 			const q = { removed: false, _id: id };
 			// Update statement
-			const u = { $set: { fingerPrint: finger } };
+			const u = { $set: { fingerprint: finger } };
 			const cb = await Model.findOneAndUpdate(q, u, { new: true }).exec();
 			if (cb)
 				return {

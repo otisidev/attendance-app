@@ -232,6 +232,7 @@ const resolvers = {
 	},
 	Student: {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
+		fingerprint: ({ fingerPrint }) => fingerPrint,
 		assigned_courses: async ({ assigned_courses }, _, { dataSources }) => {
 			return await dataSources.loaders.dcLoader.loadMany(
 				assigned_courses.map(x => x.toString())
