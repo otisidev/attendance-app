@@ -57,6 +57,18 @@ const resolvers = {
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},
+		UpdateSingleLecturerBiometric: async (_, __, { dataSources, user }) => {
+			if (user) {
+				const { id, template } = __;
+				const { _lecService } = dataSources;
+				const result = await _lecService.UpdateFingerprint(
+					id,
+					template
+				);
+				return result;
+			}
+			return new AuthenticationError("Unauthorized Access!");
+		},
 		DeleteLecturer: async (_, { id }, { dataSources, user }) => {
 			if (user) {
 				return await dataSources._lecService.RemoveLecturer(id);

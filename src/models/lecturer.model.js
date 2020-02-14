@@ -25,7 +25,7 @@ const LecturerSchema = new Schema(
 			trim: true
 		},
 		fingerprint: {
-			type: Buffer,
+			type: String,
 			required: false
 		},
 		assignedCourses: [

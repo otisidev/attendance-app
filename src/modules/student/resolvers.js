@@ -115,6 +115,16 @@ const resolvers = {
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},
+		UpdateSingleStudentBiometric: async (_, __, { dataSources, user }) => {
+			// validation
+			if (user) {
+				const { id, template } = __;
+				const { _studService } = dataSources;
+				const result = _studService.UpdateFingerprint(id, template);
+				return result;
+			}
+			return new AuthenticationError("Unauthorized Access!");
+		},
 		DeleteStudent: async (_, { id }, { dataSources, user }) => {
 			if (user) {
 				return await dataSources._studService.RemoveStudent(id);

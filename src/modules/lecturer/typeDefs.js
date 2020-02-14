@@ -37,6 +37,14 @@ const typeDefs = gql`
 			"lecturer fingerprint model"
 			model: FingerUpdateModel!
 		): LecturerResponse!
+		"Update a single lecturer fingerprint template"
+		UpdateSingleLecturerBiometric(
+			"lecturer fingerprint id"
+			id: ID!
+			"Lecturer fingerprint template"
+			template: String!
+		): LecturerResponse!
+
 		"Upload lecturer biometric file"
 		UploadLecturerBiometricData(
 			"File containing a list of id and fingerprint of lecturer"
@@ -85,7 +93,7 @@ const typeDefs = gql`
 		"email address"
 		email: String!
 		"Fingerprint template (Binary)"
-		fingerprint: ID
+		fingerprint: String
 		"Date created"
 		created_at: String!
 		"Assigned departmental course"

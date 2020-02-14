@@ -50,6 +50,12 @@ const typeDefs = gql`
 			"Finger print update model"
 			model: FingerUpdateModel!
 		): StudentResponse!
+		UpdateSingleStudentBiometric(
+			"Student id"
+			id: ID!
+			"Finger print template"
+			tmeplate: String!
+		): StudentResponse!
 
 		"Updates student current level"
 		UpdateStudentLevel("Student new level" level: Int!): StudentResponse!
@@ -145,7 +151,7 @@ const typeDefs = gql`
 		"email address"
 		email: String!
 		"Fingerprint template (Binary)"
-		fingerprint: ID
+		fingerprint: String
 		"Date created"
 		created_at: String!
 		"Assigned departmental course"

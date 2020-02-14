@@ -36,7 +36,7 @@ const StudentSchema = new Schema(
 			trim: true
 		},
 		fingerPrint: {
-			type: Buffer,
+			type: String,
 			trim: true
 		},
 		registeredCourses: [
