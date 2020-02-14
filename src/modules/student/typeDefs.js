@@ -54,7 +54,7 @@ const typeDefs = gql`
 			"Student id"
 			id: ID!
 			"Finger print template"
-			tmeplate: String!
+			template: String!
 		): StudentResponse!
 
 		"Updates student current level"
