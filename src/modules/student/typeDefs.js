@@ -9,6 +9,13 @@ const typeDefs = gql`
 			"student's level"
 			level: Int!
 		): StudentListResponse!
+
+		GetDepartmentalStudentForEnrollment(
+			"Department id"
+			department: ID!
+			"student's level"
+			level: Int!
+		): StudentListResponse!
 		"List of Student in a the entire campus"
 		GetStudents(
 			"Page no"

@@ -164,6 +164,26 @@ exports.StudentService = class StudentService {
 		throw new Error("No student found!");
 	}
 
+	async GetStudentsByDepartmentForEnroll(department, level) {
+		if (isValid(department) && level) {
+			const q = {
+				removed: false,
+				department,
+				level,
+				fingerPrint: { $exits: false }
+			};
+			const cb = await Model.find(q)
+				.sort({ name: -1 })
+				.exec();
+			return {
+				docs: cb,
+				status: 200,
+				message: "Completed"
+			};
+		}
+		throw new Error("No student found!");
+	}
+
 	async GetStudents(page, limit) {
 		const q = { removed: false };
 		const opt = {

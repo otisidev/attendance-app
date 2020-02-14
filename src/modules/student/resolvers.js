@@ -10,6 +10,21 @@ const resolvers = {
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},
+		GetDepartmentalStudentForEnrollment: async (
+			_,
+			__,
+			{ dataSources, user }
+		) => {
+			if (user) {
+				const { department: d, level } = __;
+				const { _studService } = dataSources;
+				return await _studService.GetStudentsByDepartmentForEnroll(
+					d,
+					level
+				);
+			}
+			return new AuthenticationError("Unauthorized Access!");
+		},
 		GetStudents: async (_, __, { dataSources, user }) => {
 			if (user) {
 				const { page, limit } = __;
