@@ -92,7 +92,7 @@ exports.LecturerService = class LecturerService {
 	}
 
 	async UpdateFingerprint(id, finger) {
-		if (isValid(id) && print) {
+		if (isValid(id) && finger) {
 			// query
 			const q = { removed: false, _id: id };
 			// Update statement
