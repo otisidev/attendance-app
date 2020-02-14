@@ -4,6 +4,7 @@ const typeDefs = gql`
 	extend type Query {
 		"List of Lecturer within the system"
 		GetLecturers: LecturerListResponse!
+		GetLecturersForEnrollment: LecturerListResponse!
 		"Gets a single Lecturer using its' id"
 		GetLecturer("Lecturer id" id: ID!): LecturerResponse!
 		"Gets a single lecturer information by email/phone/reg no"

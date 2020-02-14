@@ -8,6 +8,12 @@ const resolvers = {
 			}
 			return new AuthenticationError("Unauthorized Access!");
 		},
+		GetLecturersForEnrollment: async (_, __, { dataSources, user }) => {
+			if (user) {
+				return await dataSources._lecService.GetLecturersForEnrollment();
+			}
+			return new AuthenticationError("Unauthorized Access!");
+		},
 		GetLecturer: async (_, { id }, { dataSources, user }) => {
 			if (user) {
 				return await dataSources._lecService.GetLecturer(id);

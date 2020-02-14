@@ -73,6 +73,17 @@ exports.LecturerService = class LecturerService {
 			message: "Completed"
 		};
 	}
+	async GetLecturersForEnrollment() {
+		const q = { removed: false, fingerprint: { $exists: false } };
+		const cb = await Model.find(q)
+			.sort({ name: 1 })
+			.exec();
+		return {
+			docs: cb,
+			status: 200,
+			message: "Completed"
+		};
+	}
 
 	async RemoveLecturer(id) {
 		if (isValid(id)) {
