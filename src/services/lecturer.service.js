@@ -74,7 +74,7 @@ exports.LecturerService = class LecturerService {
 		};
 	}
 	async GetLecturersForEnrollment() {
-		const q = { removed: false, fingerprint: { $exists: false } };
+		const q = { removed: false, fingerprint: { $eq: null } };
 		const cb = await Model.find(q)
 			.sort({ name: 1 })
 			.exec();

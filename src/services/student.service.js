@@ -170,7 +170,7 @@ exports.StudentService = class StudentService {
 				removed: false,
 				department,
 				level,
-				fingerPrint: { $exits: false }
+				fingerPrint: { $eq: null }
 			};
 			const cb = await Model.find(q)
 				.sort({ name: -1 })

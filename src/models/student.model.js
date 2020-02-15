@@ -37,7 +37,8 @@ const StudentSchema = new Schema(
 		},
 		fingerPrint: {
 			type: String,
-			trim: true
+			trim: true,
+			default: null
 		},
 		registeredCourses: [
 			{
