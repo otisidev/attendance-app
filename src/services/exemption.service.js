@@ -9,7 +9,7 @@ exports.ExemptionService = class ExemptionService {
 	//
 	async NewExemption(model) {
 		if (model && isValid(model.attendance) && isValid(model.student)) {
-			const cb = new Model(model).save();
+			const cb = await new Model(model).save();
 			if (cb)
 				return {
 					status: 200,
