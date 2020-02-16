@@ -51,14 +51,19 @@ const resolvers = {
 		},
 		UpdateLecturerBiometric: async (_, __, { dataSources, user }) => {
 			if (user) {
-				const { model } = __;
+				const { lecturerId, template } = __;
 				const { _lecService, _fService } = dataSources;
 				const result = await _lecService.UpdateFingerprint(
-					model.student,
-					model.template
+					lecturerId,
+					template
 				);
 				// await
-				await _fService.LogNew({ ...model, author: user.id });
+				await _fService.LogNew({
+					...__,
+					author: user.id,
+					target: "Lecturer",
+					target_id: lecturerId
+				});
 				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");

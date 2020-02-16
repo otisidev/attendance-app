@@ -2,11 +2,10 @@ const { model, Schema } = require("mongoose");
 
 const FingerPrintSchema = new Schema(
 	{
-		student: {
+		target_id: {
 			type: Schema.Types.ObjectId,
 			required: true,
-			trim: true,
-			ref: "Student"
+			trim: true
 		},
 		author: {
 			type: Schema.Types.ObjectId,
@@ -29,6 +28,10 @@ const FingerPrintSchema = new Schema(
 		removed: {
 			type: Boolean,
 			default: false
+		},
+		target: {
+			type: String,
+			default: "Student"
 		}
 	},
 	{ timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }

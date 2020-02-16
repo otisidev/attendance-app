@@ -73,6 +73,7 @@ exports.LecturerService = class LecturerService {
 			message: "Completed"
 		};
 	}
+
 	async GetLecturersForEnrollment() {
 		const q = { removed: false, fingerprint: { $eq: null } };
 		const cb = await Model.find(q)
