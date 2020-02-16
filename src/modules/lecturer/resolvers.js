@@ -58,7 +58,7 @@ const resolvers = {
 					model.template
 				);
 				// await
-				await _fService.LogNew(model);
+				await _fService.LogNew({ ...model, author: user.id });
 				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");

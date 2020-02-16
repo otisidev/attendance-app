@@ -120,12 +120,12 @@ const resolvers = {
 			if (user) {
 				const { model } = __;
 				const { _fService, _studService } = dataSources;
-				const result = _studService.UpdateFingerprint(
+				const result = await _studService.UpdateFingerprint(
 					model.student,
 					model.template
 				);
 				// Update finger print model
-				await _fService.LogNew(model);
+				await _fService.LogNew({ ...model, author: user.id });
 				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");
@@ -135,7 +135,10 @@ const resolvers = {
 			if (user) {
 				const { id, template } = __;
 				const { _studService } = dataSources;
-				const result = _studService.UpdateFingerprint(id, template);
+				const result = await _studService.UpdateFingerprint(
+					id,
+					template
+				);
 				return result;
 			}
 			return new AuthenticationError("Unauthorized Access!");
