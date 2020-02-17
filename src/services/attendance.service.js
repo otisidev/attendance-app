@@ -122,28 +122,29 @@ exports.AttendanceService = class AttendanceService {
 	/**
 	 * Adds a new attendance record
 	 * @param {string} student student id
-	 * @param {Array<any>} attendanceList attendance list
+	 * @param {any} attendance attendance object
 	 * @param {string} session Active session id
 	 */
-	async NewAttendance(student, attendanceList, session) {
-		if (isValid(student) && isValid(session) && attendanceList.length) {
-			// build attendance valid object
-			const attendances = attendanceList.map(i => ({
-				session,
+	async NewAttendance(student, attendance, session) {
+		if (
+			isValid(student) &&
+			isValid(session) &&
+			attendance &&
+			attendance.students.every(x => isValid(x))
+		) {
+			const cb = await new Model({
+				...attendance,
 				studentAuthor: student,
-				...i
-			}));
-
-			const result = await Model.insertMany(attendances, {
-				rawResult: true
+				session
 			});
-			if (result && result.insertedCount)
+
+			if (cb)
 				return {
 					status: 200,
-					message: `Recorded new ${result.insertedCount} attendance successfully!`,
+					message: `Recorded new ${cb.students} attendance successfully!`,
 					doc: {
-						total_uploaded: attendances.length,
-						total_saved: result.insertedCount
+						total_uploaded: attendance.students.length,
+						total_saved: cb.student.length
 					}
 				};
 		}
