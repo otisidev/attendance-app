@@ -170,7 +170,7 @@ const typeDefs = gql`
 		"Date created"
 		created_at: String!
 		"Assigned departmental course"
-		assigned_courses: [DepartmentalCourse!]
+		registered_courses: [DepartmentalCourse!]
 		"Student password"
 		image: String
 		"Reg no"
