@@ -214,9 +214,7 @@ exports.StudentService = class StudentService {
 				}
 			};
 			// const
-			const cb = await Model.find(q)
-				.select("-registeredCourses")
-				.exec();
+			const cb = await Model.find(q).exec();
 
 			return {
 				status: 200,

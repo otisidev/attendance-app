@@ -261,9 +261,11 @@ const resolvers = {
 			_,
 			{ dataSources }
 		) => {
-			return await dataSources.loaders.dcLoader.loadMany(
-				registeredCourses.map(x => x.departmentalCourse.toString())
-			);
+			if (registeredCourses.length)
+				return await dataSources.loaders.dcLoader.loadMany(
+					registeredCourses.map(x => x.departmentalCourse.toString())
+				);
+			return [];
 		},
 		department: async ({ department }, _, { dataSources }) => {
 			return await dataSources.loaders.departmentLoader.load(
