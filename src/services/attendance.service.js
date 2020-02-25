@@ -130,21 +130,21 @@ exports.AttendanceService = class AttendanceService {
 			isValid(student) &&
 			isValid(session) &&
 			attendance &&
-			attendance.students.every(x => isValid(x))
+			attendance.students.every(x => isValid(x.student))
 		) {
 			const cb = await new Model({
 				...attendance,
 				studentAuthor: student,
 				session
-			});
+			}).save();
 
 			if (cb)
 				return {
 					status: 200,
-					message: `Recorded new ${cb.students} attendance successfully!`,
+					message: `Recorded ${cb.students.length} new attendance successfully!`,
 					doc: {
 						total_uploaded: attendance.students.length,
-						total_saved: cb.student.length
+						total_saved: cb.students.length
 					}
 				};
 		}
@@ -153,22 +153,18 @@ exports.AttendanceService = class AttendanceService {
 
 	/**
 	 * Checks for attendance file validation
-	 * @param {Array<any>} attendance_list attendance list from file
+	 * @param {any} attendance attendance list from file
 	 */
-	async IsFileValid(attendance_list) {
-		if (attendance_list.length) {
-			if (
-				attendance_list.every(
-					item =>
-						"departmentalCourse" in item &&
-						"lecturer" in item &&
-						"date" in item &&
-						"students" in item &&
-						typeof item.students === "object"
-				)
-			)
-				return true;
-		}
+	async IsFileValid(attendance) {
+		if (
+			attendance &&
+			"departmentalCourse" in attendance &&
+			"lecturer" in attendance &&
+			"date" in attendance &&
+			"students" in attendance
+		)
+			return true;
+
 		return false;
 	}
 

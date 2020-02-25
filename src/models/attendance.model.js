@@ -32,7 +32,7 @@ const AttendanceSchema = new Schema(
 		},
 		date: {
 			type: Date,
-			default: true
+			required: true
 		},
 		students: [
 			{

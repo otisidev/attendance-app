@@ -84,6 +84,7 @@ const resolvers = {
 		created_at: ({ created_at }) => new Date(created_at).toISOString(),
 		credit_unit: ({ creditUnit }) => creditUnit,
 		assgined_lecturers: async ({ lecturers }, _, { dataSources }) => {
+			// console.log(JSON.stringify(lecturers, null, 4));
 			return await dataSources.loaders.lecturerLoader.loadMany(
 				lecturers.map(c => c.toString())
 			);
