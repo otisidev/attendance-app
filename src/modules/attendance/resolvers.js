@@ -53,7 +53,7 @@ const resolvers = {
 	},
 	Mutation: {
 		UploadAttendance: async (_, { file }, { dataSources, user }) => {
-			console.log("users:", user);
+			// console.log("users:", user);
 			if (user) {
 				const { _aService, _sService, helpers } = dataSources;
 				// read file from request
@@ -61,9 +61,9 @@ const resolvers = {
 				// read file content
 				const data = await helpers.fileRead(createReadStream());
 				// validate file content
+				console.log(data);
 				if (data) {
-					console.log("DATA =>", data);
-					const json_data = JSON.parse(data);
+					const json_data = data;
 					// check if the file content some props
 					if (await _aService.IsFileValid(json_data)) {
 						// get active session
