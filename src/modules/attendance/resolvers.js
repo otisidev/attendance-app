@@ -53,6 +53,7 @@ const resolvers = {
 	},
 	Mutation: {
 		UploadAttendance: async (_, { file }, { dataSources, user }) => {
+			console.log("users:", user);
 			if (user) {
 				const { _aService, _sService, helpers } = dataSources;
 				// read file from request
