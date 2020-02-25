@@ -61,8 +61,8 @@ const resolvers = {
 				const data = await helpers.fileRead(createReadStream());
 				// validate file content
 				if (data) {
+					console.log("DATA =>", data);
 					const json_data = JSON.parse(data);
-					// console.log(json_data);
 					// check if the file content some props
 					if (await _aService.IsFileValid(json_data)) {
 						// get active session
