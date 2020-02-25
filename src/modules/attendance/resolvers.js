@@ -59,9 +59,9 @@ const resolvers = {
 				// read file from request
 				const { createReadStream } = await file;
 				// read file content
-				// const data = await helpers.fileRead(createReadStream());
-				// // validate file content
-				// console.log( data);
+				const data = await helpers.fileRead(createReadStream());
+				// validate file content
+				console.log(data);
 				if (data) {
 					const json_data = JSON.parse(data);
 					// check if the file content some props
