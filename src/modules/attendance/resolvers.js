@@ -61,22 +61,22 @@ const resolvers = {
 				// read file content
 				const data = await helpers.fileRead(createReadStream());
 				// validate file content
-				console.log(data);
-				// if (data) {
-				// 	const json_data = data;
-				// 	// check if the file content some props
-				// 	if (await _aService.IsFileValid(json_data)) {
-				// 		// get active session
-				// 		const session_res = await _sService.GetActiveSession();
-				// 		// save and report back
-				// 		const result = await _aService.NewAttendance(
-				// 			user.id,
-				// 			json_data,
-				// 			session_res.doc.id
-				// 		);
-				// 		return result;
-				// 	}
-				// }
+				// console.log( data);
+				if (data) {
+					const json_data = JSON.parse(data);
+					// check if the file content some props
+					if (await _aService.IsFileValid(json_data)) {
+						// get active session
+						const session_res = await _sService.GetActiveSession();
+						// save and report back
+						const result = await _aService.NewAttendance(
+							user.id,
+							json_data,
+							session_res.doc.id
+						);
+						return result;
+					}
+				}
 				return new ApolloError(
 					"File not well formatted! File content must be an arraay that contains date, students, lecturer, and departmentalCourse props.",
 					"404"

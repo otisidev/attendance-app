@@ -22,7 +22,7 @@ const server = new ApolloServer({
 		helpers,
 		loaders
 	}),
-	context: async ({ event }) => {
+	context: async event => {
 		const cb = {
 			userAgent: event.headers["user-agent"]
 		};
