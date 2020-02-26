@@ -7,14 +7,14 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"dev": "nodemon src/main.js",
+		"dev": "nodemon main.js",
 		"build:lambda": "netlify-lambda build src",
 		"start:lambda": "netlify-lambda serve src",
 		"build": " npm run build:lambda"
 	},
 	"dependencies": {
 		"apollo-server": "^2.9.16",
-		"apollo-server-lambda": "^2.9.16",
+		"apollo-server-lambda": "^2.9.5",
 		"axios": "^0.19.2",
 		"bcryptjs": "^2.4.3",
 		"dataloader": "^2.0.0",
@@ -25,5 +25,8 @@
 		"mongoose": "^5.8.10",
 		"mongoose-paginate-v2": "^1.3.6",
 		"netlify-lambda": "^1.6.3"
+	},
+	"devDependencies": {
+		"serverless-offline": "^5.11.0"
 	}
 }

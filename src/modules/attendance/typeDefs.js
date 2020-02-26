@@ -22,7 +22,7 @@ const typeDefs = gql`
 		"Upload attendance"
 		UploadAttendance(
 			"Attendance file"
-			file: Upload!
+			content: String!
 		): AttendanceUploadResponse!
 	}
 

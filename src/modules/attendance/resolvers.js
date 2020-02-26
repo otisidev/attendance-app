@@ -52,18 +52,13 @@ const resolvers = {
 		}
 	},
 	Mutation: {
-		UploadAttendance: async (_, { file }, { dataSources, user }) => {
+		UploadAttendance: async (_, __, { dataSources, user }) => {
 			// console.log("users:", user);
 			if (user) {
-				const { _aService, _sService, helpers } = dataSources;
-				// read file from request
-				const { createReadStream } = await file;
-				// read file content
-				const data = await helpers.fileRead(createReadStream());
+				const { _aService, _sService } = dataSources;
 				// validate file content
-				console.log(data);
-				if (data) {
-					const json_data = JSON.parse(data);
+				if (__.content) {
+					const json_data = JSON.parse(__.content);
 					// check if the file content some props
 					if (await _aService.IsFileValid(json_data)) {
 						// get active session
@@ -78,8 +73,8 @@ const resolvers = {
 					}
 				}
 				return new ApolloError(
-					"File not well formatted! File content must be an arraay that contains date, students, lecturer, and departmentalCourse props.",
-					"404"
+					"File not well formatted! File content must contain date, students, lecturer, and departmentalCourse props.",
+					"500"
 				);
 			}
 			return new AuthenticationError("Unauthorized Access!");
