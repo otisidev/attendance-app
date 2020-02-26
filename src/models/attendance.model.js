@@ -55,7 +55,8 @@ const AttendanceSchema = new Schema(
 			author: {
 				type: Schema.Types.ObjectId,
 				trim: true,
-				ref: "User"
+				ref: "User",
+				default: null
 			},
 			status: {
 				type: Boolean,

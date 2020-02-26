@@ -130,12 +130,19 @@ exports.AttendanceService = class AttendanceService {
 			isValid(student) &&
 			isValid(session) &&
 			attendance &&
-			attendance.students.every(x => isValid(x.student))
+			attendance.ss.every(x => isValid(x.s))
 		) {
+			const students = attendance.ss.map(c => ({
+				student: c.s,
+				present: c.p
+			}));
 			const cb = await new Model({
-				...attendance,
+				date: attendance.d,
+				departmentalCourse: attendance.dc,
+				lecturer: attendance.l,
 				studentAuthor: student,
-				session
+				session,
+				students
 			}).save();
 
 			if (cb)
@@ -158,10 +165,10 @@ exports.AttendanceService = class AttendanceService {
 	async IsFileValid(attendance) {
 		if (
 			attendance &&
-			"departmentalCourse" in attendance &&
-			"lecturer" in attendance &&
-			"date" in attendance &&
-			"students" in attendance
+			"dc" in attendance &&
+			"l" in attendance &&
+			"d" in attendance &&
+			"ss" in attendance
 		)
 			return true;
 
