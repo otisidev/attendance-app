@@ -27,7 +27,7 @@ const resolvers = {
         },
         GetStudentById: async (_, { id }, { dataSources, user }) => {
             if (user) {
-                return await dataSources._studService.GetStudentByid(id);
+                return await dataSources._studService.GetStudentById(id);
             }
             return new AuthenticationError("Unauthorized Access!");
         },
@@ -171,7 +171,7 @@ const resolvers = {
                 const { departmentalCourse: courses } = __;
                 const { _studService, _sService } = dataSources;
                 // get student
-                const student_res = await _studService.GetStudentByid(user.id);
+                const student_res = await _studService.GetStudentById(user.id);
                 // get active session
                 const session_res = await _sService.GetActiveSession();
                 const { level } = student_res.doc;
