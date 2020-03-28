@@ -38,6 +38,6 @@ exports.handler = async event => {
         }
         return helpers.response(500, { status: 500, message: "Connection not established! Please try again later." });
     } catch (error) {
-        return helpers.response(500, { status: 500, message: error.message });
+        return helpers.response(500, { status: 500, message: error.message || "Authentication Error!" });
     }
 };

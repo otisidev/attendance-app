@@ -48,7 +48,7 @@ const response = (status, body) => {
         headers: {
             "Access-Control-Allow-Origin": "*"
         },
-        body: JSON.stringify(body)
+        body: JSON.parse(body)
     };
 };
 
