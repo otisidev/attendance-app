@@ -46,9 +46,10 @@ const response = (status, body) => {
     return {
         statusCode: status,
         headers: {
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json"
         },
-        body: JSON.parse(body)
+        body: JSON.stringify(body)
     };
 };
 

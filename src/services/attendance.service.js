@@ -146,7 +146,7 @@ exports.AttendanceService = class AttendanceService {
                     status: 200,
                     message: `Recorded ${cb.students.length} new attendance successfully!`,
                     doc: {
-                        total_uploaded: attendance.students.length,
+                        total_uploaded: attendance.ss.length,
                         total_saved: cb.students.length
                     }
                 };
