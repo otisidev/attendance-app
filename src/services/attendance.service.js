@@ -128,6 +128,9 @@ exports.AttendanceService = class AttendanceService {
      */
     async NewAttendance(student, attendance, session) {
         if (isValid(student) && isValid(session) && attendance && attendance.ss.every(x => isValid(x.s))) {
+            // Checks if attendance already exists
+            const _res = await this.HasBeedAddedAttendanceByDate(attendance.d);
+            if (_res) throw new Error("Attendance record already exists!");
             const students = attendance.ss.map(c => ({
                 student: c.s,
                 present: c.p
@@ -169,5 +172,14 @@ exports.AttendanceService = class AttendanceService {
         const q = { _id: { $in: ids } };
         const cb = await Model.find(q).exec();
         return batchResult(ids, cb);
+    }
+
+    async HasBeedAddedAttendanceByDate(date) {
+        if (date) {
+            const query = { removed: false, date };
+            const count = await Model.countDocuments(query).exec();
+            return count > 0;
+        }
+        return false;
     }
 };
