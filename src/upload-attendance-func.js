@@ -3,7 +3,7 @@ const { verify } = require("jsonwebtoken");
 const { parse } = require("lambda-multipart-parser");
 const { connect } = require("../context/icontext.service");
 
-exports.handler = async event => {
+exports.uploadHandler = async event => {
     try {
         // get token and validate it
         const token = helpers.GetToken(event);
