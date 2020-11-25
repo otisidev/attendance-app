@@ -14,17 +14,17 @@ const server = new ApolloServer({
         require("./modules/department-course"),
         require("./modules/lecturer"),
         require("./modules/student"),
-        require("./modules/attendance")
+        require("./modules/attendance"),
     ],
     introspection: true,
     dataSources: () => ({
         ...services,
         helpers,
-        loaders
+        loaders,
     }),
     context: async ({ event }) => {
         const cb = {
-            userAgent: event.headers["user-agent"]
+            userAgent: event.headers["user-agent"],
         };
         const auth = event.headers.authorization || "";
         if (auth) {
@@ -37,7 +37,7 @@ const server = new ApolloServer({
             }
         }
         return cb;
-    }
+    },
 });
 
 // init database connection
@@ -50,12 +50,13 @@ connect()
     //             .then(({ url, subscriptionsUrl }) => console.log(`Running @ >_ ${url}`) || console.log("Pub-Sub Server @ >_ " + subscriptionsUrl))
     //             .catch(e => console.log("SERVER ERROR: ", e.message))
     // )
-    .catch(err => console.log("CONNECTION ERROR: ", err.message));
+    .catch((err) => console.log("CONNECTION ERROR: ", err.message));
 
 exports.handler = server.createHandler({
     cors: {
         origin: "*",
-        methods: "*",
-        allowedHeaders: "*"
-    }
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTION"],
+        allowedHeaders: "*",
+    },
 });
