@@ -54,9 +54,9 @@ connect()
 
 exports.handler = server.createHandler({
     cors: {
-        origin: "*",
+        origin: true,
         credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTION"],
+        methods: "*",
         allowedHeaders: "*",
     },
 });
