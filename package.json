@@ -14,21 +14,21 @@
         "build": " npm run build:lambda"
     },
     "dependencies": {
-        "apollo-server": "^2.9.16",
-        "apollo-server-lambda": "^2.9.5",
-        "axios": "^0.19.2",
+        "apollo-server": "^2.25.1",
+        "apollo-server-lambda": "^2.25.1",
+        "axios": "^0.21.1",
         "bcryptjs": "^2.4.3",
         "dataloader": "^2.0.0",
-        "dotenv": "^8.2.0",
-        "encoding": "^0.1.12",
-        "graphql": "^14.5.8",
+        "dotenv": "^10.0.0",
+        "encoding": "^0.1.13",
+        "graphql": "^15.5.0",
         "jsonwebtoken": "^8.5.1",
         "lambda-multipart-parser": "^0.0.2",
         "mongodb": "^3.6.9",
         "mongodb-client-encryption": "^1.2.5",
         "mongoose": "^5.12.14",
         "mongoose-paginate-v2": "^1.3.18",
-        "netlify-lambda": "^1.6.3"
+        "netlify-lambda": "^2.0.9"
     },
     "devDependencies": {
         "serverless-offline": "^5.11.0"
