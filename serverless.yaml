@@ -1,0 +1,41 @@
+service: attendance-api-service
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  environment:
+    DB_PATH: mongodb+srv://attendance-dev:0oSK8N1MCtLh8yhg@attendance-nseao.mongodb.net
+    DB_KEY: 0oSK8N1MCtLh8yhg
+    DB_NAME: attendance_test_db
+
+# you can add packaging information here
+package:
+  #  include:
+  #    - include-me.js
+  #    - include-me-dir/**
+  exclude:
+    # - node_modules/**
+    - venv/**
+    - .git/**
+    - .vscode/**
+    - .prettierrc
+    - .gitignore
+    - yarn.lock
+
+functions:
+  graphql:
+    handler: src/main.handler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true

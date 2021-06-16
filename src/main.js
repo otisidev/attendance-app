@@ -27,7 +27,7 @@ const server = new ApolloServer({
         const cb = {
             userAgent: event.headers["user-agent"],
         };
-        const auth = event.headers.authorization || "";
+        const auth = event.headers.authorization || event.headers.Authorization || "";
         if (auth) {
             const token = auth.split(" ")[1];
             // check if token is null or empty
