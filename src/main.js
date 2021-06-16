@@ -1,5 +1,5 @@
 const { connect } = require("../context/icontext.service");
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("apollo-server-lambda");
 const { services, helpers, loaders } = require("./services/root.service");
 const { verify } = require("jsonwebtoken");
 
@@ -22,7 +22,7 @@ const server = new ApolloServer({
         helpers,
         loaders,
     }),
-    context: async ({ req: event }) => {
+    context: async ({  event }) => {
         const cb = {
             userAgent: event.headers["user-agent"],
         };
@@ -42,19 +42,19 @@ const server = new ApolloServer({
 
 // init database connection
 connect()
-    .then(
-        (status) =>
-            status === true &&
-            server
-                .listen(4900)
-                .then(({ url, subscriptionsUrl }) => console.log(`Running @ >_ ${url}`) || console.log("Pub-Sub Server @ >_ " + subscriptionsUrl))
-                .catch((e) => console.log("SERVER ERROR: ", e.message))
-    )
+    // .then(
+    //     (status) =>
+    //         status === true &&
+    //         server
+    //             .listen(4900)
+    //             .then(({ url, subscriptionsUrl }) => console.log(`Running @ >_ ${url}`) || console.log("Pub-Sub Server @ >_ " + subscriptionsUrl))
+    //             .catch((e) => console.log("SERVER ERROR: ", e.message))
+    // )
     .catch((err) => console.log("CONNECTION ERROR: ", err.message));
 
-// exports.handler = server.createHandler({
-//     cors: {
-//         origin: "*",
-//         credentials: true,
-//     },
-// });
+exports.handler = server.createHandler({
+    cors: {
+        origin: "*",
+        credentials: true,
+    },
+});
